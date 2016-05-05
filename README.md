@@ -14,5 +14,9 @@ This feature is implemented because the player has only 1 hour a day to play wit
 The game requires Java 8 to be installed.
 Since Java 8 is installed, everything is ready to run the game.
 
+## Build
+To build the game you need Maven.
+Cd into a folder of the project and type `mvn package` on the command line.
+
 ## Run
 Type on the command line `java -jar rps-console-1.0` and follow game's prompt to play.
