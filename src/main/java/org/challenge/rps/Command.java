@@ -5,39 +5,63 @@
  */
 package org.challenge.rps;
 
+import java.util.function.Function;
+
 /**
- *
+ * Enum of available commands for player. Each command has an action assoiated with it.
  * @author mg
  */
 public enum Command {
 
-    EXIT(1, "Exit"),
-    COMP_COMP(2, "Computer vs. Computer"),
-    PLAYER_COMP(3, "Player vs. Computer");
+    /**
+     * Exit command.
+     */
+    EXIT("Exit"),
+    /**
+     * Command to start a game in computer vs. computer mode.
+     */
+    COMP_COMP("Computer vs. Computer"),
+    /**
+     * Command to start s game in player vs. computer mode.
+     */
+    PLAYER_COMP("Player vs. Computer");
 
-    private final int id;
+    /**
+     * Name of the command element.
+     */
     private final String name;
 
-    private Command(int aId, String aName) {
-        id = aId;
+    /**
+     * Command enumeration element constructor.
+     * @param aName 
+     */
+    private Command(String aName) {
         name = aName;
     }
 
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * Enumeration element's name property getter.
+     * @return Enumeration element's name.
+     */
     public String getName() {
         return name;
     }
 
-    public static Command as(int aId) {
-        for (Command cmd : Command.values()) {
-            if (cmd.getId() == aId) {
-                return cmd;
-            }
-        }
-        return null;
-    }
+    /**
+     * Array of enumeration element by ordinal position.
+     * It is used in as() predicate.
+     * @see #as() 
+     */
+    private static final Command[] COMMANDS = Command.values();
 
+    /**
+     * Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
+     * @return Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
+     * @see ConsoleUtils#nextOrdinal(java.util.Scanner, java.util.function.Function) 
+     */
+    public static Function<Integer, Command> as() {
+        return (Integer aOrdinal) -> {
+            return aOrdinal >= 0 && aOrdinal < COMMANDS.length ? COMMANDS[aOrdinal] : null;
+        };
+    }
 }

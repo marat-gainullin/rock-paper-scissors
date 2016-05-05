@@ -5,38 +5,62 @@
  */
 package org.challenge.rps;
 
+import java.util.function.Function;
+
 /**
- *
+ * Enum of available tools for player to select from. Each tool has assoiated tools wich beta it.
  * @author mg
  */
 public enum Tool {
-    ROCK(1, "Rock"),
-    PAPER(2, "Paper"),
-    SCISSORS(3, "Scissors");
+    /**
+     * The "Rock" tool.
+     */
+    ROCK("Rock"),
+    /**
+     * The "Paper" tool
+     */
+    PAPER("Paper"),
+    /**
+     * The "Scossors" tool
+     */
+    SCISSORS("Scissors");
 
-    private final int id;
+    /**
+     * Name of the tool element.
+     */
     private final String name;
 
-    private Tool(int aId, String aName) {
-        id = aId;
+    /**
+     * Tool enumeration element constructor.
+     * @param aName 
+     */
+    private Tool(String aName) {
         name = aName;
     }
 
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * Enumeration element's name property getter.
+     * @return Enumeration element's name.
+     */
     public String getName() {
         return name;
     }
 
-    public static Tool as(int aId) {
-        for (Tool tool : Tool.values()) {
-            if (tool.getId() == aId) {
-                return tool;
-            }
-        }
-        return null;
-    }
+    /**
+     * Array of enumeration element by ordinal position.
+     * It is used in as() predicate.
+     * @see #as() 
+     */
+    private static final Tool[] TOOLS = Tool.values();
 
+    /**
+     * Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
+     * @return Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
+     * @see ConsoleUtils#nextOrdinal(java.util.Scanner, java.util.function.Function) 
+     */
+    public static Function<Integer, Tool> as() {
+        return (Integer aOrdinal) -> {
+            return aOrdinal >= 0 && aOrdinal < TOOLS.length ? TOOLS[aOrdinal] : null;
+        };
+    }
 }

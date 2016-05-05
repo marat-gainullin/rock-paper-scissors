@@ -10,21 +10,36 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 /**
- *
+ * Utility class with useful abstractions for console input/output.
  * @author mg
  */
-public class Utils {
+public class ConsoleUtils {
 
-    public static final String HELLO_MSG = "Rock, paper, scissors game :)\n";
-    public static final String HELP_MSG = "Do your game:";
+    /**
+     * Constant with hello message.
+     */
+    public static final String COMMANDS_MSG = "How do you want to play:";
+    /**
+     * Prompt message for a player.
+     */
     public static final String PROMPT = "play > ";
-    public static final String UTF8 = "utf-8";
+    /**
+     * Constant with OS's line separator.
+     */
     public static final String LINE_SEP = System.getProperty("line.separator");
 
-    public static <T> T nextOrdinal(Scanner aSource, Function<Integer, T> aFactory) {
+    /**
+     * Abstraction for some identified entity input by id from a console.
+     * Detects wrong input and attempts to so it again.
+     * @param <T> Type of the entity.
+     * @param aSource Console scanner used to input numbers - ids.
+     * @param aFactory Predicate used for actual entity instance creation.
+     * @return Creation entity instance.
+     */
+    public static <T> T byId(Scanner aSource, Function<Integer, T> aFactory) {
         Runnable attempt = () -> {
             aSource.nextLine();
-            printHelp();
+            printCommands();
             System.out.print(PROMPT);
         };
         T command = null;
@@ -35,7 +50,7 @@ public class Utils {
                 if (cmd != null) {
                     command = cmd;
                 } else {
-                    System.out.println(String.format("Unknown number %d. Try again, please.", commandId));
+                    //System.out.println(String.format("Unknown number %d. Try again, please.", commandId));
                     attempt.run();
                 }
             } catch (InputMismatchException ex) {
@@ -45,14 +60,15 @@ public class Utils {
         return command;
     }
 
-    public static void printHelp() {
-        System.out.println(HELP_MSG);
+    /**
+     * Prints a list of available commands.
+     */
+    public static void printCommands() {
+        System.out.println(COMMANDS_MSG);
         StringBuilder message = new StringBuilder();
         for (Command cmd : Command.values()) {
             message
                     .append(cmd.ordinal())
-                    .append(", ")
-                    .append(cmd.getName())
                     .append(" - ")
                     .append(cmd.getName())
                     .append(LINE_SEP);
