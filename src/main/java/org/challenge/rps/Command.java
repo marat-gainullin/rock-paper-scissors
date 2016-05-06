@@ -6,25 +6,24 @@
 package org.challenge.rps;
 
 import java.util.function.Function;
+import org.challenge.rps.exceptions.InvalidNumberException;
 
 /**
- * Enum of available commands for player. Each command has an action assoiated with it.
+ * Enum of available commands for player. Each command has an action assoiated
+ * with it.
+ *
  * @author mg
  */
 public enum Command {
 
     /**
-     * Exit command.
-     */
-    EXIT("Exit"),
-    /**
      * Command to start a game in computer vs. computer mode.
      */
-    COMP_COMP("Computer vs. Computer"),
+    COMP_COMP("Computer"),
     /**
      * Command to start s game in player vs. computer mode.
      */
-    PLAYER_COMP("Player vs. Computer");
+    PLAYER_COMP("Player");
 
     /**
      * Name of the command element.
@@ -33,7 +32,8 @@ public enum Command {
 
     /**
      * Command enumeration element constructor.
-     * @param aName 
+     *
+     * @param aName
      */
     private Command(String aName) {
         name = aName;
@@ -41,6 +41,7 @@ public enum Command {
 
     /**
      * Enumeration element's name property getter.
+     *
      * @return Enumeration element's name.
      */
     public String getName() {
@@ -48,20 +49,26 @@ public enum Command {
     }
 
     /**
-     * Array of enumeration element by ordinal position.
-     * It is used in as() predicate.
-     * @see #as() 
+     * Array of enumeration element by ordinal position. It is used in as()
+     * predicate.
+     *
+     * @see #as()
      */
     private static final Command[] COMMANDS = Command.values();
 
     /**
-     * Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
-     * @return Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
-     * @see ConsoleUtils#nextOrdinal(java.util.Scanner, java.util.function.Function) 
+     * Predicate for <code>ConsoleUtils.nextId()</code>.
+     *
+     * @return Predicate for <code>ConsoleUtils.nextId()</code>.
+     * @see ConsoleUtils#nextId(java.util.Scanner, java.util.function.Function)
      */
     public static Function<Integer, Command> as() {
         return (Integer aOrdinal) -> {
-            return aOrdinal >= 0 && aOrdinal < COMMANDS.length ? COMMANDS[aOrdinal] : null;
+            try {
+                return COMMANDS[aOrdinal];
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                throw new InvalidNumberException(aOrdinal);
+            }
         };
     }
 }

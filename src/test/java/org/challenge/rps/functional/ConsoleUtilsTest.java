@@ -30,7 +30,9 @@ public class ConsoleUtilsTest {
      */
     @Test
     public void correctKnownInput() throws UnsupportedEncodingException {
-        assertSame(Command.EXIT, ConsoleUtils.byId(new Scanner(new ByteArrayInputStream("0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8), Command.as()));
+        try (Scanner in = new Scanner(new ByteArrayInputStream("0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        }
     }
 
     /**
@@ -40,22 +42,26 @@ public class ConsoleUtilsTest {
      */
     @Test
     public void incorrectInput() throws UnsupportedEncodingException {
-        assertSame(Command.EXIT, ConsoleUtils.byId(new Scanner(new ByteArrayInputStream("blah blah blah\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8), Command.as()));
+        try (Scanner in = new Scanner(new ByteArrayInputStream("blah blah blah\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        }
     }
 
     /**
-     * Tests wether coreect, but unknown input is overcomed, and known command
+     * Tests wether correct, but unknown input is overcomed, and known command
      * is created.
      *
      * @throws UnsupportedEncodingException
      */
     @Test
     public void unknownInput() throws UnsupportedEncodingException {
-        assertSame(Command.EXIT, ConsoleUtils.byId(new Scanner(new ByteArrayInputStream("10\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8), Command.as()));
+        try (Scanner in = new Scanner(new ByteArrayInputStream("10\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        }
     }
 
     /**
-     * Tests reaction of <code>ConsoleUtils.byId</code> on an exception while
+     * Tests reaction of <code>ConsoleUtils.nextId</code> on an exception while
      * text input.
      *
      * @throws UnsupportedEncodingException
@@ -63,19 +69,25 @@ public class ConsoleUtilsTest {
     @Test(expected = IllegalStateException.class)
     public void interruptedInput() throws UnsupportedEncodingException {
         Integer expectedInput = 2;
-        assertNull(ConsoleUtils.byId(new Scanner(new ByteArrayInputStream(expectedInput.toString().getBytes(GameConstants.UTF8)), GameConstants.UTF8), (Integer aOrdinal) -> {
-            assertEquals(expectedInput, aOrdinal);
-            throw new IllegalStateException("Test input is interrupted.");
-        }));
+        try (Scanner in = new Scanner(new ByteArrayInputStream(expectedInput.toString().getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
+            assertNull(ConsoleUtils.nextId(
+                    in, "", (Integer aOrdinal) -> {
+                        assertEquals(expectedInput, aOrdinal);
+                        throw new IllegalStateException("Test input is interrupted.");
+                    }));
+        }
     }
 
     /**
-     * Tests reaction of <code>ConsoleUtils.byId</code> on an empty text input.
+     * Tests reaction of <code>ConsoleUtils.nextId</code> on an empty text
+     * input.
      *
      * @throws UnsupportedEncodingException
      */
     @Test(expected = NoSuchElementException.class)
     public void emptyInput() throws UnsupportedEncodingException {
-        ConsoleUtils.byId(new Scanner(new ByteArrayInputStream(new byte[]{}), GameConstants.UTF8), null);
+        try (Scanner in = new Scanner(new ByteArrayInputStream(new byte[]{}), GameConstants.UTF8)) {
+            ConsoleUtils.nextId(in, "", null);
+        }
     }
 }

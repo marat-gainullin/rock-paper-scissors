@@ -14,7 +14,7 @@ public class GameConstants {
     /**
      * Hello message, printed at the begining.
      */
-    public static final String HELLO_MSG = "Rock, paper, scissors game :)\n";
+    public static final String HELLO_MSG = "Rock, paper, scissors game :)";
     /**
      * General strings encoding name.
      */

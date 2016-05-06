@@ -6,9 +6,12 @@
 package org.challenge.rps;
 
 import java.util.function.Function;
+import org.challenge.rps.exceptions.InvalidNumberException;
 
 /**
- * Enum of available tools for player to select from. Each tool has assoiated tools wich beta it.
+ * Enum of available tools for player to select from. Each tool has assoiated
+ * tools wich beta it.
+ *
  * @author mg
  */
 public enum Tool {
@@ -17,13 +20,13 @@ public enum Tool {
      */
     ROCK("Rock"),
     /**
-     * The "Paper" tool
+     * The "Scissors" tool.
      */
-    PAPER("Paper"),
+    SCISSORS("Scissors"),
     /**
-     * The "Scossors" tool
+     * The "Paper" tool.
      */
-    SCISSORS("Scissors");
+    PAPER("Paper");
 
     /**
      * Name of the tool element.
@@ -32,7 +35,8 @@ public enum Tool {
 
     /**
      * Tool enumeration element constructor.
-     * @param aName 
+     *
+     * @param aName
      */
     private Tool(String aName) {
         name = aName;
@@ -40,6 +44,7 @@ public enum Tool {
 
     /**
      * Enumeration element's name property getter.
+     *
      * @return Enumeration element's name.
      */
     public String getName() {
@@ -47,20 +52,26 @@ public enum Tool {
     }
 
     /**
-     * Array of enumeration element by ordinal position.
-     * It is used in as() predicate.
-     * @see #as() 
+     * Array of enumeration element by ordinal position. It is used in as()
+     * predicate.
+     *
+     * @see #as()
      */
     private static final Tool[] TOOLS = Tool.values();
 
     /**
-     * Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
-     * @return Predicate for <code>ConsoleUtils.nextOrdinal()</code>.
-     * @see ConsoleUtils#nextOrdinal(java.util.Scanner, java.util.function.Function) 
+     * Predicate for <code>ConsoleUtils.nextId()</code>.
+     *
+     * @return Predicate for <code>ConsoleUtils.nextId()</code>.
+     * @see ConsoleUtils#nextId(java.util.Scanner, java.util.function.Function)
      */
     public static Function<Integer, Tool> as() {
         return (Integer aOrdinal) -> {
-            return aOrdinal >= 0 && aOrdinal < TOOLS.length ? TOOLS[aOrdinal] : null;
+            try {
+                return TOOLS[aOrdinal];
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                throw new InvalidNumberException(aOrdinal);
+            }
         };
     }
 }
