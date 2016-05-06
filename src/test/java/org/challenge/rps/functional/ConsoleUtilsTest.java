@@ -5,13 +5,11 @@
  */
 package org.challenge.rps.functional;
 
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.challenge.rps.Command;
 import org.challenge.rps.ConsoleUtils;
-import org.challenge.rps.GameConstants;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,8 +28,8 @@ public class ConsoleUtilsTest {
      */
     @Test
     public void correctKnownInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner(new ByteArrayInputStream("0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        try (Scanner in = new Scanner("0\n")) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
         }
     }
 
@@ -42,8 +40,8 @@ public class ConsoleUtilsTest {
      */
     @Test
     public void incorrectInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner(new ByteArrayInputStream("blah blah blah\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        try (Scanner in = new Scanner("blah blah blah\n0\n")) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
         }
     }
 
@@ -55,8 +53,8 @@ public class ConsoleUtilsTest {
      */
     @Test
     public void unknownInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner(new ByteArrayInputStream("10\n0\n".getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, "", Command.as()));
+        try (Scanner in = new Scanner("10\n0\n")) {
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
         }
     }
 
@@ -69,12 +67,11 @@ public class ConsoleUtilsTest {
     @Test(expected = IllegalStateException.class)
     public void interruptedInput() throws UnsupportedEncodingException {
         Integer expectedInput = 2;
-        try (Scanner in = new Scanner(new ByteArrayInputStream(expectedInput.toString().getBytes(GameConstants.UTF8)), GameConstants.UTF8)) {
-            assertNull(ConsoleUtils.nextId(
-                    in, "", (Integer aOrdinal) -> {
-                        assertEquals(expectedInput, aOrdinal);
-                        throw new IllegalStateException("Test input is interrupted.");
-                    }));
+        try (Scanner in = new Scanner(expectedInput.toString())) {
+            assertNull(ConsoleUtils.nextId(in, System.out, "", (Integer aOrdinal) -> {
+                assertEquals(expectedInput, aOrdinal);
+                throw new IllegalStateException("Test input is interrupted.");
+            }));
         }
     }
 
@@ -86,8 +83,8 @@ public class ConsoleUtilsTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void emptyInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner(new ByteArrayInputStream(new byte[]{}), GameConstants.UTF8)) {
-            ConsoleUtils.nextId(in, "", null);
+        try (Scanner in = new Scanner("")) {
+            ConsoleUtils.nextId(in, System.out, "", null);
         }
     }
 }

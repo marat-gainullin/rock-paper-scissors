@@ -5,6 +5,7 @@
  */
 package org.challenge.rps;
 
+import java.util.Optional;
 import java.util.function.Function;
 import org.challenge.rps.exceptions.InvalidNumberException;
 
@@ -62,10 +63,10 @@ public enum Command {
      * @return Predicate for <code>ConsoleUtils.nextId()</code>.
      * @see ConsoleUtils#nextId(java.util.Scanner, java.util.function.Function)
      */
-    public static Function<Integer, Command> as() {
+    public static Function<Integer, Optional<Command>> as() {
         return (Integer aOrdinal) -> {
             try {
-                return COMMANDS[aOrdinal];
+                return Optional.of(COMMANDS[aOrdinal]);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 throw new InvalidNumberException(aOrdinal);
             }

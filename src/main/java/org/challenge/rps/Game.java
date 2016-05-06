@@ -15,6 +15,39 @@ import org.challenge.rps.exceptions.QuitLevelException;
 public class Game {
 
     /**
+     * Computer vs. Computer round message.
+     */
+    public static final String COMPUTER_WINS_MSG = " Computer wins.";
+    /**
+     * You win message.
+     */
+    public static final String YOU_WIN_MSG = " You win!";
+    /**
+     * Dead heat message.
+     */
+    private static final String DEAD_HEAT_MSG = " Dead heat!";
+    /**
+     * Good bye message.
+     */
+    private static final String GOOD_BYE_MSG = "Good bye. See you next time :)";
+    /**
+     * 'y' answer message.
+     */
+    private static final String Y_ANSWER = "y";
+    /**
+     * Constant with computers start message.
+     */
+    public static final String COMPUTERS_ROUND_MSG = "Computers, Go! (Y/n)";
+    /**
+     * Hello message, printed at the begining.
+     */
+    public static final String HELLO_MSG = "Rock, paper, scissors game :)";
+    /**
+     * General strings encoding name.
+     */
+    public static final String UTF8 = "utf-8";
+
+    /**
      * Entry-point method of the program.
      *
      * @param args
@@ -23,50 +56,50 @@ public class Game {
         modes(System.in, System.out);
     }
 
-    private static void modes(InputStream aIn, PrintStream out) {
-        try (Scanner in = new Scanner(aIn, GameConstants.UTF8)) {
+    private static void modes(InputStream aIn, PrintStream aOut) {
+        try (Scanner source = new Scanner(aIn, Game.UTF8)) {
             String commandsMessage = ConsoleUtils.commandsMessage();
-            out.println(GameConstants.HELLO_MSG);
+            aOut.println(Game.HELLO_MSG);
             boolean lastCommand = false;
             while (!lastCommand) {
                 try {
-                    Command command = ConsoleUtils.nextId(in, commandsMessage, Command.as());
+                    Command command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
                     switch (command) {
                         case COMP_COMP:
-                            compComp(in, out);
+                            compComp(source, aOut);
                             break;
                         case PLAYER_COMP:
-                            playerComp(in, out);
+                            playerComp(source, aOut);
                             break;
                     }
                 } catch (QuitLevelException ex) {
-                    goodBye(out);
+                    goodBye(aOut);
                     lastCommand = true;
                 }
             }
         }
     }
 
-    private static void compComp(Scanner in, PrintStream out) {
+    private static void compComp(Scanner aIn, PrintStream aOut) {
         boolean newRound = true;
         while (newRound) {
-            out.print(ConsoleUtils.COMPUTERS_MSG);
-            String line = in.nextLine();
-            if (line.isEmpty() || line.toLowerCase().startsWith("y")) {
-                makeRound(selectToolFromHistory(), out);
+            aOut.print(COMPUTERS_ROUND_MSG);
+            String line = aIn.nextLine();
+            if (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
+                makeRound(selectToolFromHistory(), aOut);
             } else {
                 newRound = false;
             }
         }
     }
 
-    private static void playerComp(Scanner in, PrintStream out) {
+    private static void playerComp(Scanner aIn, PrintStream aOut) {
         String toolsMessage = ConsoleUtils.toolsMessage();
         boolean newRound = true;
         while (newRound) {
             try {
-                Tool tool = ConsoleUtils.nextId(in, toolsMessage, Tool.as());
-                makeRound(tool, out);
+                Tool tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
+                makeRound(tool, aOut);
             } catch (QuitLevelException ex) {
                 newRound = false;
             }
@@ -83,17 +116,17 @@ public class Game {
         Optional<Tool> winner = round.winner();
         if (winner.isPresent()) {
             if (winner.get() == aPlayerTool) {
-                out.println(round.toString() + " You win!");
+                out.println(round.toString() + YOU_WIN_MSG);
             } else {
-                out.println(round.toString() + " Computer wins.");
+                out.println(round.toString() + COMPUTER_WINS_MSG);
             }
         } else {
-            out.println(round.toString() + " Dead heat!");
+            out.println(round.toString() + DEAD_HEAT_MSG);
         }
     }
 
     private static void goodBye(PrintStream out) {
-        out.println("Good bye. See you next time :)");
+        out.println(GOOD_BYE_MSG);
     }
 
 }

@@ -5,6 +5,8 @@
  */
 package org.challenge.rps;
 
+import java.io.PrintStream;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 import org.challenge.rps.exceptions.InvalidNumberException;
@@ -18,17 +20,14 @@ import org.challenge.rps.exceptions.QuitLevelException;
 public class ConsoleUtils {
 
     /**
-     * Constant with computers start message.
-     */
-    public static final String COMPUTERS_MSG = "Computers, Go! (Y/n)";
-    /**
      * Prompt message for a player.
      */
-    public static final String PROMPT = "q - quit > ";
+    private static final String PROMPT = "q - quit > ";
+
     /**
-     * Constant with OS's line separator.
+     * Time is up message for a player.
      */
-    public static final String LINE_SEP = System.getProperty("line.separator");
+    private static final String TIMEOUT_MSG = "hurry up! ";
 
     /**
      * Error message, when unknown number is entered.
@@ -49,20 +48,25 @@ public class ConsoleUtils {
      * Detects wrong input and attempts to do it again.
      *
      * @param <T> Type of the entity.
-     * @param aSource Console scanner used to input numbers - ids.
+     * @param aSource A scanner used to input numbers - ids.
+     * @param aOut An output print stream for messages.
      * @param anAttemptMessge A message to be displayed when a player inputs an
      * incorrect symbols.
      * @param aFactory Predicate used for actual entity instance creation.
      * @return Creation entity instance.
      */
-    public static <T> T nextId(Scanner aSource, String anAttemptMessge, Function<Integer, T> aFactory) {
+    public static <T> T nextId(Scanner aSource, PrintStream aOut, String anAttemptMessge, Function<Integer, Optional<T>> aFactory) {
         Runnable attempt = () -> {
-            System.out.print(anAttemptMessge);
-            System.out.print(PROMPT);
+            aOut.print(anAttemptMessge);
+            long begining = System.currentTimeMillis();
+            if(System.currentTimeMillis() - begining > TIMEOUT){
+                aOut.print(TIMEOUT_MSG);
+            }
+            aOut.print(PROMPT);
         };
         attempt.run();
-        T entity = null;
-        while (entity == null) {
+        Optional<T> entity = Optional.empty();
+        while (!entity.isPresent()) {
             String line = aSource.nextLine().toLowerCase();
             if (line.startsWith(EXIT_COMMAND)) {
                 throw new QuitLevelException(line);
@@ -70,16 +74,17 @@ public class ConsoleUtils {
                 try {
                     entity = aFactory.apply(Integer.valueOf(line));
                 } catch (NumberFormatException ex) {
-                    System.out.println(String.format(NOT_NUMBER_MSG, line));
+                    aOut.println(String.format(NOT_NUMBER_MSG, line));
                     attempt.run();
                 } catch (InvalidNumberException ex) {
-                    System.out.println(String.format(UNKNOWN_NUMBER_MSG, ex.getNumber()));
+                    aOut.println(String.format(UNKNOWN_NUMBER_MSG, ex.getNumber()));
                     attempt.run();
                 }
             }
         }
-        return entity;
+        return entity.get();
     }
+    private static final int TIMEOUT = 3600000;
 
     /**
      * Constrcuts a list of available commands.

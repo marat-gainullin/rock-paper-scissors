@@ -9,6 +9,8 @@ Also, the game has a lighwieght console processor isolated from game's logic.
 Since a player wants to play a new game each time, history is not persisted.
 Game has a logic, that hints a user about 1 hour elapsed from the begining of game session.
 This feature is implemented because the player has only 1 hour a day to play with the game.
+### Extension
+If you want to add weapons and transform the game into , you should add them to `Tool` enumeration and re-implement `Round.winner()` method.
 
 ## Install
 The game requires Java 8 to be installed.
