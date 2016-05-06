@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import java.io.PrintStream;
@@ -10,7 +5,6 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 import org.challenge.rps.exceptions.InvalidNumberException;
-import org.challenge.rps.exceptions.QuitLevelException;
 
 /**
  * Utility class with useful abstractions for console input/output.
@@ -55,7 +49,7 @@ public class ConsoleUtils {
      * @param aFactory Predicate used for actual entity instance creation.
      * @return Creation entity instance.
      */
-    public static <T> T nextId(Scanner aSource, PrintStream aOut, String anAttemptMessge, Function<Integer, Optional<T>> aFactory) {
+    public static <T> Optional<T> nextId(Scanner aSource, PrintStream aOut, String anAttemptMessge, Function<Integer, Optional<T>> aFactory) {
         Runnable attempt = () -> {
             aOut.print(anAttemptMessge);
             long begining = System.currentTimeMillis();
@@ -69,7 +63,7 @@ public class ConsoleUtils {
         while (!entity.isPresent()) {
             String line = aSource.nextLine().toLowerCase();
             if (line.startsWith(EXIT_COMMAND)) {
-                throw new QuitLevelException(line);
+                break;
             } else {
                 try {
                     entity = aFactory.apply(Integer.valueOf(line));
@@ -82,7 +76,7 @@ public class ConsoleUtils {
                 }
             }
         }
-        return entity.get();
+        return entity;
     }
     private static final int TIMEOUT = 3600000;
 

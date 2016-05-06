@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
-import org.challenge.rps.exceptions.QuitLevelException;
 
 /**
  * Main class of the program. Contains high level logic and input/output
@@ -54,28 +53,24 @@ public class Game {
      */
     public static void main(String[] args) {
         modes(System.in, System.out);
+        goodBye(System.out);
     }
 
     private static void modes(InputStream aIn, PrintStream aOut) {
         try (Scanner source = new Scanner(aIn, Game.UTF8)) {
             String commandsMessage = ConsoleUtils.commandsMessage();
             aOut.println(Game.HELLO_MSG);
-            boolean lastCommand = false;
-            while (!lastCommand) {
-                try {
-                    Command command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
-                    switch (command) {
-                        case COMP_COMP:
-                            compComp(source, aOut);
-                            break;
-                        case PLAYER_COMP:
-                            playerComp(source, aOut);
-                            break;
-                    }
-                } catch (QuitLevelException ex) {
-                    goodBye(aOut);
-                    lastCommand = true;
+            Optional<Command> command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
+            while (command.isPresent()) {
+                switch (command.get()) {
+                    case COMP_COMP:
+                        compComp(source, aOut);
+                        break;
+                    case PLAYER_COMP:
+                        playerComp(source, aOut);
+                        break;
                 }
+                command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
             }
         }
     }
@@ -95,14 +90,10 @@ public class Game {
 
     private static void playerComp(Scanner aIn, PrintStream aOut) {
         String toolsMessage = ConsoleUtils.toolsMessage();
-        boolean newRound = true;
-        while (newRound) {
-            try {
-                Tool tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
-                makeRound(tool, aOut);
-            } catch (QuitLevelException ex) {
-                newRound = false;
-            }
+        Optional<Tool> tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
+        while (tool.isPresent()) {
+            makeRound(tool.get(), aOut);
+            tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
         }
     }
 

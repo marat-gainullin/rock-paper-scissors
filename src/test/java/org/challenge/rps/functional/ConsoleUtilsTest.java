@@ -29,7 +29,7 @@ public class ConsoleUtilsTest {
     @Test
     public void correctKnownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("0\n")) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()).get());
         }
     }
 
@@ -41,7 +41,7 @@ public class ConsoleUtilsTest {
     @Test
     public void incorrectInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("blah blah blah\n0\n")) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()).get());
         }
     }
 
@@ -54,7 +54,7 @@ public class ConsoleUtilsTest {
     @Test
     public void unknownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("10\n0\n")) {
-            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()));
+            assertSame(Command.COMP_COMP, ConsoleUtils.nextId(in, System.out, "", Command.as()).get());
         }
     }
 
@@ -71,7 +71,7 @@ public class ConsoleUtilsTest {
             assertNull(ConsoleUtils.nextId(in, System.out, "", (Integer aOrdinal) -> {
                 assertEquals(expectedInput, aOrdinal);
                 throw new IllegalStateException("Test input is interrupted.");
-            }));
+            }).get());
         }
     }
 
