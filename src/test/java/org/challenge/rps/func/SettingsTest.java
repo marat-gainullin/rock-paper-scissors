@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.challenge.rps.functional;
+package org.challenge.rps.func;
 
 import org.junit.Test;
 import org.challenge.rps.Settings;

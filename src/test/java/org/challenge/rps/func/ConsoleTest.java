@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.challenge.rps.functional;
+package org.challenge.rps.func;
 
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  *
  * @author mg
  */
-public class ConsoleUtilsTest {
+public class ConsoleTest {
 
     /**
      * Tests wether correctg and known from leads to exepected command
