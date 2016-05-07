@@ -37,6 +37,14 @@ public class Console {
      * Period character string.
      */
     private static final String PERIOD = ".";
+    /**
+     * ANSI/VT100 escaped palette. Used for tools highlighting.
+     */
+    private static final String[] PALETTE = new String[]{
+         "\u001b[35m%s\u001b[0m" // Magenta
+        ,"\u001b[36m%s\u001b[0m" // Cyan
+        ,"\u001b[32m%s\u001b[0m" // Green
+    };
 
     /**
      * Abstraction for some identified entity from by id from a console.
@@ -79,10 +87,10 @@ public class Console {
     public static String to(Round aRound, boolean aColorful) {
         StringBuilder content = new StringBuilder();
         if (aColorful) {
-            content // TODO: add a palette to tools.
-                    .append(aRound.getPlayer1Tool().getName())
+            content 
+                    .append(String.format(PALETTE[aRound.getPlayer1Tool().ordinal() % PALETTE.length], aRound.getPlayer1Tool().getName()))
                     .append(DELIMITER)
-                    .append(aRound.getPlayer2Tool().getName())
+                    .append(String.format(PALETTE[aRound.getPlayer2Tool().ordinal() % PALETTE.length], aRound.getPlayer2Tool().getName()))
                     .append(PERIOD);
             return content.toString();
         } else {

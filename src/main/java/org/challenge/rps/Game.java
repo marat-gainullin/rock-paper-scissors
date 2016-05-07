@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Main class of the program. Contains high level logic and from/output
+ * Main class of the program. Contains high level logic and input/output
  * configuration.
  *
  * @author mg
@@ -51,6 +51,10 @@ public class Game {
      * Message with time warning. It is displayed when period of time intended to play is elapsed.
      */
     private static final String TIME_WARN_MESSAGE = "The time is up. Let's call it a day.";
+    /**
+     * Nice game message. It is displayed when Computer vs. Computer or Player vs. Computer session ends.
+     */
+    private static final String NICE_GAME_MSG = "It was a nice game!";
 
     /**
      * Entry-point method of the program.
@@ -90,6 +94,12 @@ public class Game {
      */
     private Random uniform;
 
+    /**
+     * Game constructor.
+     * @param aInput Console input source.
+     * @param aOutput Console output destination.
+     * @param aSettings Settins to be used by this instanceof game.
+     */
     public Game(Scanner aInput, PrintStream aOutput, Settings aSettings) {
         super();
         input = aInput;
@@ -106,6 +116,9 @@ public class Game {
         goodBye();
     }
 
+    /**
+     * Invites a player to make a choice of what game he wants to play.
+     */
     private void modes() {
         String commands = Console.commands();
         output.println(Game.HELLO_MSG);
@@ -200,8 +213,8 @@ public class Game {
      * success rate.
      */
     private void report() {
-        output.println("Nice game!");
-        // TODO: output all characteristics. output.println(String.format("Rounds played: %d. Wins: %d. Loses: %d. Success rate: %f2%", history.size()));
+        output.println(NICE_GAME_MSG);
+        output.println();
     }
 
     /**
