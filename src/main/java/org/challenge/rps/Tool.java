@@ -58,7 +58,7 @@ public enum Tool {
      *
      * @see #as()
      */
-    private static final Tool[] TOOLS = Tool.values();
+    public static final Tool[] TOOLS = Tool.values();
 
     /**
      * Predicate for <code>ConsoleUtils.nextId()</code>.

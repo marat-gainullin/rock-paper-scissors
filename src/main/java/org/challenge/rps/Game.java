@@ -1,12 +1,14 @@
 package org.challenge.rps;
 
-import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Main class of the program. Contains high level logic and input/output
+ * Main class of the program. Contains high level logic and from/output
  * configuration.
  *
  * @author mg
@@ -16,11 +18,11 @@ public class Game {
     /**
      * Computer vs. Computer round message.
      */
-    public static final String COMPUTER_WINS_MSG = " Computer wins.";
+    private static final String COMPUTER_WINS_MSG = " Computer wins.";
     /**
      * You win message.
      */
-    public static final String YOU_WIN_MSG = " You win!";
+    private static final String YOU_WIN_MSG = " You win!";
     /**
      * Dead heat message.
      */
@@ -36,15 +38,19 @@ public class Game {
     /**
      * Constant with computers start message.
      */
-    public static final String COMPUTERS_ROUND_MSG = "Computers, Go! (Y/n)";
+    private static final String COMPUTERS_ROUND_MSG = "My comp, Go! (Y/n)";
     /**
      * Hello message, printed at the begining.
      */
-    public static final String HELLO_MSG = "Rock, paper, scissors game :)";
+    private static final String HELLO_MSG = "Let's play \"rock, paper, scissors\" :)";
     /**
      * General strings encoding name.
      */
-    public static final String UTF8 = "utf-8";
+    private static final String UTF8 = "utf-8";
+    /**
+     * Message with time warning. It is displayed when period of time intended to play is elapsed.
+     */
+    private static final String TIME_WARN_MESSAGE = "The time is up. Let's call it a day.";
 
     /**
      * Entry-point method of the program.
@@ -52,72 +58,158 @@ public class Game {
      * @param args
      */
     public static void main(String[] args) {
-        modes(System.in, System.out);
-        goodBye(System.out);
-    }
-
-    private static void modes(InputStream aIn, PrintStream aOut) {
-        try (Scanner source = new Scanner(aIn, Game.UTF8)) {
-            String commandsMessage = ConsoleUtils.commandsMessage();
-            aOut.println(Game.HELLO_MSG);
-            Optional<Command> command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
-            while (command.isPresent()) {
-                switch (command.get()) {
-                    case COMP_COMP:
-                        compComp(source, aOut);
-                        break;
-                    case PLAYER_COMP:
-                        playerComp(source, aOut);
-                        break;
-                }
-                command = ConsoleUtils.nextId(source, aOut, commandsMessage, Command.as());
-            }
+        try (Scanner source = new Scanner(System.in, UTF8)) {
+            Game game = new Game(source, System.out, Settings.parse(args));
+            game.start();
         }
     }
 
-    private static void compComp(Scanner aIn, PrintStream aOut) {
+    /**
+     * The source of console input from a player.
+     */
+    private final Scanner input;
+    /**
+     * The output for a player.
+     */
+    private final PrintStream output;
+    /**
+     * Settings of the game. They are parsed from an arguments array.
+     */
+    private final Settings settings;
+    /**
+     * History of rounds.
+     */
+    private final Queue<Round> history = new LinkedList<>();
+    /**
+     * Timestamp in milliseconds.
+     */
+    private long started;
+    /**
+     * Pseudo random numbers generator.
+     * It is renewed each game.
+     */
+    private Random uniform;
+
+    public Game(Scanner aInput, PrintStream aOutput, Settings aSettings) {
+        super();
+        input = aInput;
+        output = aOutput;
+        settings = aSettings;
+    }
+
+    /**
+     * Starts a new game.
+     */
+    public void start() {
+        started = System.currentTimeMillis();
+        modes();
+        goodBye();
+    }
+
+    private void modes() {
+        String commands = Console.commands();
+        output.println(Game.HELLO_MSG);
+        Optional<Command> command = Console.from(input, output, commands, Command.as());
+        while (command.isPresent()) {
+            if (System.currentTimeMillis() - started > settings.getWarnPeriod()) {
+                output.println(TIME_WARN_MESSAGE);
+            }
+            history.clear();
+            uniform = new Random();
+            switch (command.get()) {
+                case COMP_COMP:
+                    compComp();
+                    break;
+                case PLAYER_COMP:
+                    playerComp();
+                    break;
+            }
+            command = Console.from(input, output, commands, Command.as());
+        }
+    }
+
+    /**
+     * Plays Computer vs. Computer game.
+     */
+    private void compComp() {
         boolean newRound = true;
         while (newRound) {
-            aOut.print(COMPUTERS_ROUND_MSG);
-            String line = aIn.nextLine();
+            output.print(COMPUTERS_ROUND_MSG);
+            String line = input.nextLine();
             if (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
-                makeRound(selectToolFromHistory(), aOut);
+                makeRound(autoSelectTool());
             } else {
                 newRound = false;
             }
         }
     }
 
-    private static void playerComp(Scanner aIn, PrintStream aOut) {
-        String toolsMessage = ConsoleUtils.toolsMessage();
-        Optional<Tool> tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
+    /**
+     * Plays Player vs. Computer game.
+     */
+    private void playerComp() {
+        String tools = Console.tools();
+        Optional<Tool> tool = Console.from(input, output, tools, Tool.as());
         while (tool.isPresent()) {
-            makeRound(tool.get(), aOut);
-            tool = ConsoleUtils.nextId(aIn, aOut, toolsMessage, Tool.as());
+            makeRound(tool.get());
+            tool = Console.from(input, output, tools, Tool.as());
         }
+        report();
     }
 
-    private static Tool selectToolFromHistory() {
-        return Tool.PAPER;
+    /**
+     * Selects a tool from avaliable tools in the following manner: - If history
+     * is empty, then pseudo random number with uniform distribution is used to
+     * select a tool. - If history is not empty, then the selection process
+     * prefers successfull in the past tools.
+     *
+     * @return Automatically selected tool.
+     */
+    private Tool autoSelectTool() {
+        return Tool.TOOLS[uniform.nextInt(Tool.TOOLS.length)];
     }
 
-    private static void makeRound(Tool aPlayerTool, PrintStream out) {
-        Tool computerTool = selectToolFromHistory();
+    /**
+     * Creates a round, adds it to rounds history and reports a result of the
+     * round to the player.
+     *
+     * @param aPlayerTool A tool selected by a player for the round.
+     */
+    private void makeRound(Tool aPlayerTool) {
+        Tool computerTool = autoSelectTool();
         Round round = new Round(aPlayerTool, computerTool);
+        String roundText = Console.to(round, settings.isColorful());
         Optional<Tool> winner = round.winner();
         if (winner.isPresent()) {
             if (winner.get() == aPlayerTool) {
-                out.println(round.toString() + YOU_WIN_MSG);
+                output.println(roundText + YOU_WIN_MSG);
             } else {
-                out.println(round.toString() + COMPUTER_WINS_MSG);
+                output.println(roundText + COMPUTER_WINS_MSG);
             }
         } else {
-            out.println(round.toString() + DEAD_HEAT_MSG);
+            output.println(roundText + DEAD_HEAT_MSG);
+        }
+        history.offer(round);
+        if (history.size() > settings.getHistoryLength()) {
+            history.poll();
         }
     }
 
-    private static void goodBye(PrintStream out) {
-        out.println(GOOD_BYE_MSG);
+    /**
+     * Displays a game report. Total number of played rounds, wins count, loses count and
+     * success rate.
+     */
+    private void report() {
+        output.println("Nice game!");
+        // TODO: output all characteristics. output.println(String.format("Rounds played: %d. Wins: %d. Loses: %d. Success rate: %f2%", history.size()));
+    }
+
+    /**
+     * Says the player good bye. It is called at the end of the game. Displays a
+     * good bye message.
+     */
+    private void goodBye() {
+        output.println(GOOD_BYE_MSG);
     }
 
 }

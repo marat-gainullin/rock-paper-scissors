@@ -14,9 +14,6 @@ import java.util.Optional;
  */
 public class Round {
 
-    private static final String DELIMITER = " - ";
-    private static final String PERIOD = ".";
-
     private final Tool player1Tool;
     private final Tool player2Tool;
 
@@ -36,13 +33,6 @@ public class Round {
     public Optional<Tool> winner() {
         // In case of weapons set extension, this method should be re-implemented.
         return player1Tool == player2Tool ? Optional.empty() : Optional.of(player1Tool.ordinal() - player2Tool.ordinal() == -1 || player1Tool.ordinal() - player2Tool.ordinal() == 2 ? player1Tool : player2Tool);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder content = new StringBuilder();
-        content.append(player1Tool.getName()).append(DELIMITER).append(player2Tool.getName()).append(PERIOD);
-        return content.toString();
     }
 
 }
