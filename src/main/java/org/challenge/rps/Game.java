@@ -1,5 +1,7 @@
 package org.challenge.rps;
 
+import org.challenge.rps.strategies.SuccessStrategy;
+import org.challenge.rps.strategies.Strategy;
 import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
@@ -84,13 +86,13 @@ public class Game {
      */
     private long started;
     /**
-     * Strategy wich selects a tool for the next move for the first player. It
-     * is renewed each game.
+     * HumanStrategy wich selects a tool for the next move for the first player.
+     * It is renewed each game.
      */
     private Strategy first;
     /**
-     * Strategy wich selects a tool for the next move for the second player. It
-     * is renewed each game.
+     * HumanStrategy wich selects a tool for the next move for the second
+     * player. It is renewed each game.
      */
     private Strategy second;
 
@@ -128,8 +130,8 @@ public class Game {
             if (System.currentTimeMillis() - started > settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
-            first = new Strategy();
-            second = new Strategy();
+            first = new SuccessStrategy();
+            second = new SuccessStrategy();
             switch (command.get()) {
                 case COMP_COMP:
                     compComp();
@@ -184,12 +186,12 @@ public class Game {
         Optional<Tool> winner = round.winner();
         if (winner.isPresent()) {
             if (winner.get() == aFirstTool) {
-                first.inc(aFirstTool, true);
-                second.inc(aFirstTool, false);
+                first.used(aFirstTool, true);
+                second.used(aFirstTool, false);
                 output.println(roundText + YOU_WIN_MSG);
             } else {
-                first.inc(aFirstTool, false);
-                second.inc(aFirstTool, true);
+                first.used(aFirstTool, false);
+                second.used(aFirstTool, true);
                 output.println(roundText + COMPUTER_WINS_MSG);
             }
         } else {

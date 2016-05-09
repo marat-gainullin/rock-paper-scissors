@@ -6,9 +6,8 @@
 package org.challenge.rps.exceptions;
 
 /**
- * Exception for ConsoleUtils reading methods.
+ * Exception for Console reading methods.
  * @author mg
- * @see ConsoleUtils#
  */
 public class InvalidNumberException extends RuntimeException {
 
