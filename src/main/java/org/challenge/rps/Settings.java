@@ -5,6 +5,9 @@
  */
 package org.challenge.rps;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,18 +20,44 @@ public class Settings {
 
     /**
      * Command line parameter. Sets time interval after wich, the player is
-     * warned about time of the game. codes. Just for fun :)
+     * warned about time of the game. codes.
      */
-    public static final String TIME_WARN_PARAM = "-warn-period";
+    static final String WARN_PERIOD_PARAM = "-warn-period";
     /**
-     * Command line parameter. Sets length of history for alaysis while computer's moves.
+     * Command line parameter. Sets length of history for alaysis while
+     * computer's moves.
      */
-    public static final String HISTORY_LENGTH_PARAM = "-history-length";
+    static final String HISTORY_LENGTH_PARAM = "-history-length";
     /**
-     * Command line parameter. Colorizes the console output via ANSI escape
+     * Command line parameter. Colorizes the console output via ANSI/VT100 escape
      * codes. Just for fun :)
      */
-    public static final String COLORFUL_PARAM = "-colorful";
+    static final String COLORFUL_PARAM = "-colorful";
+
+    private static final Map<String, BiFunction<String, Settings, Integer>> PARAMS = new HashMap<String, BiFunction<String, Settings, Integer>>() {
+        {
+            put(WARN_PERIOD_PARAM, (String aValue, Settings aSettings) -> {
+                try {
+                    aSettings.setWarnPeriod(Long.valueOf(aValue));
+                } catch (NumberFormatException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
+                }
+                return 2;
+            });
+            put(HISTORY_LENGTH_PARAM, (String aValue, Settings aSettings) -> {
+                try {
+                    aSettings.setHistoryLength(Integer.valueOf(aValue));
+                } catch (NumberFormatException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
+                }
+                return 2;
+            });
+            put(COLORFUL_PARAM, (String aValue, Settings aSettings) -> {
+                aSettings.setColorful(true);
+                return 1;
+            });
+        }
+    };
     /**
      * Perid to play without a time warning.
      */
@@ -113,34 +142,13 @@ public class Settings {
         Settings settings = new Settings();
         int i = 0;
         while (i < aParams.length) {
-            switch (aParams[i]) {
-                case TIME_WARN_PARAM:
-                    if (i < aParams.length - 1) {
-                        try {
-                            settings.setWarnPeriod(Long.valueOf(aParams[i + 1]));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
-                        }
-                    }
-                    break;
-                case HISTORY_LENGTH_PARAM:
-                    if (i < aParams.length - 1) {
-                        try {
-                            settings.setHistoryLength(Integer.valueOf(aParams[i + 1]));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
-                        }
-                    }
-                    break;
-                case COLORFUL_PARAM:
-                    settings.setColorful(true);
-                    break;
-                default:
-                    Logger.getLogger(Game.class.getName()).log(Level.WARNING, "Unknown parameter '{0}'", aParams[i]);
+            BiFunction<String, Settings, Integer> handler = PARAMS.get(aParams[i]);
+            if (handler != null) {
+                i += handler.apply(i < aParams.length - 1 ? aParams[i + 1] : null, settings);
+            } else {
+                Logger.getLogger(Game.class.getName()).log(Level.WARNING, "Unknown parameter '{0}'", aParams[i]);
+                i++;
             }
-            i++;
         }
         return settings;
     }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.challenge.rps.func;
+package org.challenge.rps;
 
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;

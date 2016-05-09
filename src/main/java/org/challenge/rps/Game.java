@@ -179,7 +179,7 @@ public class Game {
      * @return Automatically selected tool.
      */
     private Tool autoSelectTool() {
-        return Tool.TOOLS[uniform.nextInt(Tool.TOOLS.length)];
+        return Tool.SCISSORS;// Tool.TOOLS[uniform.nextInt(Tool.TOOLS.length)];
     }
 
     /**
