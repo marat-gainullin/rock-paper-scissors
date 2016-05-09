@@ -24,11 +24,6 @@ public class Settings {
      */
     static final String WARN_PERIOD_PARAM = "-warn-period";
     /**
-     * Command line parameter. Sets length of history for alaysis while
-     * computer's moves.
-     */
-    static final String HISTORY_LENGTH_PARAM = "-history-length";
-    /**
      * Command line parameter. Colorizes the console output via ANSI/VT100 escape
      * codes. Just for fun :)
      */
@@ -99,6 +94,13 @@ public class Settings {
         colorful = aValue;
     }
 
+    /**
+     * Factory method of <code>Settings</code>. Returns default settings.
+     * @return 
+     */
+    public static Settings defaultSettings() {
+        return new Settings();
+    }
     /**
      * Factory method of <code>Settings</code>. Parses Settings from an array of
      * string arguments.
