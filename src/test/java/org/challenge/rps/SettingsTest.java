@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.challenge.rps.func;
+package org.challenge.rps;
 
 import org.junit.Test;
 import org.challenge.rps.Settings;
@@ -26,13 +26,13 @@ public class SettingsTest {
     @Test
     public void parseWarnPeriod() {
         long expected = 150;
-        Settings parsed = Settings.parse(Settings.TIME_WARN_PARAM, String.valueOf(expected));
+        Settings parsed = Settings.parse(Settings.WARN_PERIOD_PARAM, String.valueOf(expected));
         assertEquals(expected, parsed.getWarnPeriod());
     }
 
     @Test
     public void parseBadWarnPeriod() {
-        Settings parsed = Settings.parse(Settings.TIME_WARN_PARAM, "NaN");
+        Settings parsed = Settings.parse(Settings.WARN_PERIOD_PARAM, "NaN");
         assertEquals(3600000, parsed.getWarnPeriod());
     }
 
