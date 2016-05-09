@@ -8,7 +8,7 @@ package org.challenge.rps;
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import org.challenge.rps.Command;
+import org.challenge.rps.Mode;
 import org.challenge.rps.Console;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -29,7 +29,7 @@ public class ConsoleTest {
     @Test
     public void correctKnownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("0\n")) {
-            assertSame(Command.COMP_COMP, Console.from(in, System.out, "", Command.as()).get());
+            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
         }
     }
 
@@ -41,7 +41,7 @@ public class ConsoleTest {
     @Test
     public void incorrectInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("blah blah blah\n0\n")) {
-            assertSame(Command.COMP_COMP, Console.from(in, System.out, "", Command.as()).get());
+            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
         }
     }
 
@@ -54,7 +54,7 @@ public class ConsoleTest {
     @Test
     public void unknownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("10\n0\n")) {
-            assertSame(Command.COMP_COMP, Console.from(in, System.out, "", Command.as()).get());
+            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
         }
     }
 

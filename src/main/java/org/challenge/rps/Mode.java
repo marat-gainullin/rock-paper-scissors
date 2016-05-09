@@ -10,33 +10,32 @@ import java.util.function.Function;
 import org.challenge.rps.exceptions.InvalidNumberException;
 
 /**
- * Enum of available commands for player. Each command has an action assoiated
- * with it.
+ * Enum of available modes for the first player.
  *
  * @author mg
  */
-public enum Command {
+public enum Mode {
 
     /**
-     * Command to start a game in computer vs. computer mode.
+     * Mode to start a game in computer vs. computer mode.
      */
-    COMP_COMP("Computer"),
+    COMP("Computer instead of me"),
     /**
-     * Command to start s game in player vs. computer mode.
+     * Mode to start a game in player vs. computer mode.
      */
-    PLAYER_COMP("Player");
+    PLAYER("Will play by myself");
 
     /**
-     * Name of the command element.
+     * Name of the mode element.
      */
     private final String name;
 
     /**
-     * Command enumeration element constructor.
+     * Mode enumeration element constructor.
      *
      * @param aName
      */
-    private Command(String aName) {
+    private Mode(String aName) {
         name = aName;
     }
 
@@ -55,7 +54,7 @@ public enum Command {
      *
      * @see #as()
      */
-    private static final Command[] COMMANDS = Command.values();
+    private static final Mode[] MODES = Mode.values();
 
     /**
      * Predicate for <code>ConsoleUtils.nextId()</code>.
@@ -63,10 +62,10 @@ public enum Command {
      * @return Predicate for <code>ConsoleUtils.nextId()</code>.
      * @see ConsoleUtils#nextId(java.util.Scanner, java.util.function.Function)
      */
-    public static Function<Integer, Optional<Command>> as() {
+    public static Function<Integer, Optional<Mode>> as() {
         return (Integer aOrdinal) -> {
             try {
-                return Optional.of(COMMANDS[aOrdinal]);
+                return Optional.of(MODES[aOrdinal]);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 throw new InvalidNumberException(aOrdinal);
             }

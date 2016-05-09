@@ -104,13 +104,13 @@ public class Console {
     }
 
     /**
-     * Constrcuts a list of available commands.
+     * Constrcuts a list of available modes.
      *
-     * @return Description of all available commands.
+     * @return Description of all available modes.
      */
-    public static String commands() {
+    public static String modes() {
         StringBuilder message = new StringBuilder();
-        for (Command cmd : Command.values()) {
+        for (Mode cmd : Mode.values()) {
             message
                     .append(cmd.getName())
                     .append(" - ")

@@ -6,7 +6,6 @@
 package org.challenge.rps;
 
 import org.junit.Test;
-import org.challenge.rps.Settings;
 import static org.junit.Assert.*;
 
 /**
@@ -18,7 +17,6 @@ public class SettingsTest {
     @Test
     public void parseEmpty() {
         Settings empty = Settings.parse();
-        assertEquals(100, empty.getHistoryLength());
         assertEquals(3600000, empty.getWarnPeriod());
         assertFalse(empty.isColorful());
     }
@@ -36,19 +34,6 @@ public class SettingsTest {
         assertEquals(3600000, parsed.getWarnPeriod());
     }
 
-    @Test
-    public void parseHistoryLength() {
-        int expected = 200;
-        Settings parsed = Settings.parse(Settings.HISTORY_LENGTH_PARAM, String.valueOf(expected));
-        assertEquals(expected, parsed.getHistoryLength());
-    }
-    
-    @Test
-    public void parseBadHistoryLength() {
-        Settings parsed = Settings.parse(Settings.HISTORY_LENGTH_PARAM, "NaN");
-        assertEquals(100, parsed.getHistoryLength());
-    }
-    
     @Test
     public void parseColorful() {
         Settings parsed = Settings.parse(Settings.COLORFUL_PARAM);

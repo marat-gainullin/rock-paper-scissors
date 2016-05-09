@@ -60,14 +60,6 @@ public enum Tool {
      */
     private static final Tool[] TOOLS = Tool.values();
 
-    public static int count() {
-        return TOOLS.length;
-    }
-    
-    public static Tool at(int anIndex) {
-        return TOOLS[anIndex];
-    }
-
     /**
      * Predicate for <code>ConsoleUtils.nextId()</code>.
      *

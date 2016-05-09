@@ -5,7 +5,7 @@
  */
 package org.challenge.rps;
 
-import org.challenge.rps.Command;
+import org.challenge.rps.Mode;
 import org.challenge.rps.exceptions.InvalidNumberException;
 import org.junit.Test;
 
@@ -17,6 +17,6 @@ public class CommandTest {
 
     @Test(expected = InvalidNumberException.class)
     public void asTest() {
-        Command.as().apply(Command.values().length);
+        Mode.as().apply(Mode.values().length);
     }
 }

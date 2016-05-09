@@ -15,13 +15,21 @@ import java.util.Scanner;
 public class Game {
 
     /**
-     * Computer vs. Computer round message.
+     * Computer wins message.
      */
     private static final String COMPUTER_WINS_MSG = " Computer wins.";
     /**
      * You win message.
      */
     private static final String YOU_WIN_MSG = " You win!";
+    /**
+     * Your computer win message.
+     */
+    private static final String YOUR_COMPUTER_WIN_MSG = " Your computer wins!";
+    /**
+     * Your computer win message.
+     */
+    private static final String FOREIGN_COMPUTER_WIN_MSG = " Foreign computer wins!";
     /**
      * Dead heat message.
      */
@@ -37,7 +45,7 @@ public class Game {
     /**
      * Constant with computers start message.
      */
-    private static final String COMPUTERS_ROUND_MSG = "My comp, Go! (Y/n)";
+    private static final String COMPUTERS_ROUND_MSG = "Let computer make your choice? (Y/n)";
     /**
      * Hello message, printed at the begining.
      */
@@ -115,32 +123,33 @@ public class Game {
      */
     public void start() {
         started = System.currentTimeMillis();
-        modes();
+        output.println(Game.HELLO_MSG);
+        output.println();
+        selectMode();
         goodBye();
     }
 
     /**
-     * Invites a player to make a choice of what game he wants to play.
+     * Invites a player to make a choice of who will make his moves.
      */
-    private void modes() {
-        String commands = Console.commands();
-        output.println(Game.HELLO_MSG);
-        Optional<Command> command = Console.from(input, output, commands, Command.as());
-        while (command.isPresent()) {
+    private void selectMode() {
+        String modes = Console.modes();
+        Optional<Mode> mode = Console.from(input, output, modes, Mode.as());
+        while (mode.isPresent()) {
             if (System.currentTimeMillis() - started > settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
             first = new SuccessStrategy();
             second = new SuccessStrategy();
-            switch (command.get()) {
-                case COMP_COMP:
+            switch (mode.get()) {
+                case COMP:
                     compComp();
                     break;
-                case PLAYER_COMP:
+                case PLAYER:
                     playerComp();
                     break;
             }
-            command = Console.from(input, output, commands, Command.as());
+            mode = Console.from(input, output, modes, Mode.as());
         }
     }
 
@@ -148,15 +157,12 @@ public class Game {
      * Plays Computer vs. Computer game.
      */
     private void compComp() {
-        boolean newRound = true;
-        while (newRound) {
+        output.print(COMPUTERS_ROUND_MSG);
+        String line = input.nextLine();
+        while (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
+            makeRound(first.next(), second.next(), YOUR_COMPUTER_WIN_MSG, FOREIGN_COMPUTER_WIN_MSG);
             output.print(COMPUTERS_ROUND_MSG);
-            String line = input.nextLine();
-            if (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
-                makeRound(first.next(), second.next());
-            } else {
-                newRound = false;
-            }
+            line = input.nextLine();
         }
     }
 
@@ -167,7 +173,7 @@ public class Game {
         String tools = Console.tools();
         Optional<Tool> tool = Console.from(input, output, tools, Tool.as());
         while (tool.isPresent()) {
-            makeRound(tool.get(), second.next());
+            makeRound(tool.get(), second.next(), YOU_WIN_MSG, COMPUTER_WINS_MSG);
             tool = Console.from(input, output, tools, Tool.as());
         }
         report();
@@ -179,8 +185,10 @@ public class Game {
      *
      * @param aFirstTool A tool selected by a first player for the round.
      * @param aSecondTool A tool selected by a second player for the round.
+     * @param aFirstMessage Message displayed when the first tool wins.
+     * @param aSecondMessage Message displayed when the second tool wins.
      */
-    private void makeRound(Tool aFirstTool, Tool aSecondTool) {
+    private void makeRound(Tool aFirstTool, Tool aSecondTool, String aFirstMessage, String aSecondMessage) {
         Round round = new Round(aFirstTool, aSecondTool);
         String roundText = Console.to(round, settings.isColorful());
         Optional<Tool> winner = round.winner();
@@ -188,11 +196,11 @@ public class Game {
             if (winner.get() == aFirstTool) {
                 first.used(aFirstTool, true);
                 second.used(aFirstTool, false);
-                output.println(roundText + YOU_WIN_MSG);
+                output.println(roundText + aFirstMessage);
             } else {
                 first.used(aFirstTool, false);
                 second.used(aFirstTool, true);
-                output.println(roundText + COMPUTER_WINS_MSG);
+                output.println(roundText + aSecondMessage);
             }
         } else {
             output.println(roundText + DEAD_HEAT_MSG);

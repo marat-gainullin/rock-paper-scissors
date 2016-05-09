@@ -20,11 +20,12 @@ public class SuccessStrategy implements Strategy {
     private final Tool[] tools;
     private final Random random = new Random();
     private static final double LAMBDA = 4d;
-    private int treshold = Tool.count();
+    private int treshold;
 
     public SuccessStrategy() {
         super();
         tools = Tool.values();
+        treshold = tools.length;
         indicies = new int[tools.length];
         Arrays.setAll(indicies, (int anIndex) -> {
             return anIndex;

@@ -44,14 +44,6 @@ public class Settings {
                 }
                 return 2;
             });
-            put(HISTORY_LENGTH_PARAM, (String aValue, Settings aSettings) -> {
-                try {
-                    aSettings.setHistoryLength(Integer.valueOf(aValue));
-                } catch (NumberFormatException ex) {
-                    Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
-                }
-                return 2;
-            });
             put(COLORFUL_PARAM, (String aValue, Settings aSettings) -> {
                 aSettings.setColorful(true);
                 return 1;
@@ -62,10 +54,6 @@ public class Settings {
      * Perid to play without a time warning.
      */
     private long warnPeriod = 3600000;// 1 Hour
-    /**
-     * Length of history for alaysis while computer's moves.
-     */
-    private int historyLength = 100;
     /**
      * Whether console output should be colorized.
      */
@@ -85,16 +73,6 @@ public class Settings {
     }
 
     /**
-     * The "historyLength" parameter getter.
-     *
-     * @return Number of round to be remembered for history analysis while
-     * computer's moves.
-     */
-    public int getHistoryLength() {
-        return historyLength;
-    }
-
-    /**
      * The "colorful" parameter getter.
      *
      * @return True if colorful.
@@ -110,16 +88,6 @@ public class Settings {
      */
     private void setWarnPeriod(long aValue) {
         warnPeriod = aValue;
-    }
-
-    /**
-     *
-     * Settings setter method for "historyLength" option.
-     *
-     * @param aValue Length of rounds history. Can't be less then zero.
-     */
-    public void setHistoryLength(int aValue) {
-        historyLength = aValue >= 0 ? aValue : 0;
     }
 
     /**
