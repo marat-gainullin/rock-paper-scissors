@@ -1,10 +1,7 @@
 package org.challenge.rps;
 
 import java.io.PrintStream;
-import java.util.LinkedList;
 import java.util.Optional;
-import java.util.Queue;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -48,11 +45,13 @@ public class Game {
      */
     private static final String UTF8 = "utf-8";
     /**
-     * Message with time warning. It is displayed when period of time intended to play is elapsed.
+     * Message with time warning. It is displayed when period of time intended
+     * to play is elapsed.
      */
     private static final String TIME_WARN_MESSAGE = "The time is up. Let's call it a day.";
     /**
-     * Nice game message. It is displayed when Computer vs. Computer or Player vs. Computer session ends.
+     * Nice game message. It is displayed when Computer vs. Computer or Player
+     * vs. Computer session ends.
      */
     private static final String NICE_GAME_MSG = "It was a nice game!";
 
@@ -81,21 +80,23 @@ public class Game {
      */
     private final Settings settings;
     /**
-     * History of rounds.
-     */
-    private final Queue<Round> history = new LinkedList<>();
-    /**
      * Timestamp in milliseconds.
      */
     private long started;
     /**
-     * Pseudo random numbers generator.
-     * It is renewed each game.
+     * Strategy wich selects a tool for the next move for the first player. It
+     * is renewed each game.
      */
-    private Random uniform;
+    private Strategy first;
+    /**
+     * Strategy wich selects a tool for the next move for the second player. It
+     * is renewed each game.
+     */
+    private Strategy second;
 
     /**
      * Game constructor.
+     *
      * @param aInput Console input source.
      * @param aOutput Console output destination.
      * @param aSettings Settins to be used by this instanceof game.
@@ -127,8 +128,8 @@ public class Game {
             if (System.currentTimeMillis() - started > settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
-            history.clear();
-            uniform = new Random();
+            first = new Strategy();
+            second = new Strategy();
             switch (command.get()) {
                 case COMP_COMP:
                     compComp();
@@ -150,7 +151,7 @@ public class Game {
             output.print(COMPUTERS_ROUND_MSG);
             String line = input.nextLine();
             if (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
-                makeRound(autoSelectTool());
+                makeRound(first.next(), second.next());
             } else {
                 newRound = false;
             }
@@ -164,53 +165,41 @@ public class Game {
         String tools = Console.tools();
         Optional<Tool> tool = Console.from(input, output, tools, Tool.as());
         while (tool.isPresent()) {
-            makeRound(tool.get());
+            makeRound(tool.get(), second.next());
             tool = Console.from(input, output, tools, Tool.as());
         }
         report();
     }
 
     /**
-     * Selects a tool from avaliable tools in the following manner: - If history
-     * is empty, then pseudo random number with uniform distribution is used to
-     * select a tool. - If history is not empty, then the selection process
-     * prefers successfull in the past tools.
-     *
-     * @return Automatically selected tool.
-     */
-    private Tool autoSelectTool() {
-        return Tool.TOOLS[uniform.nextInt(Tool.TOOLS.length)];
-    }
-
-    /**
      * Creates a round, adds it to rounds history and reports a result of the
      * round to the player.
      *
-     * @param aPlayerTool A tool selected by a player for the round.
+     * @param aFirstTool A tool selected by a first player for the round.
+     * @param aSecondTool A tool selected by a second player for the round.
      */
-    private void makeRound(Tool aPlayerTool) {
-        Tool computerTool = autoSelectTool();
-        Round round = new Round(aPlayerTool, computerTool);
+    private void makeRound(Tool aFirstTool, Tool aSecondTool) {
+        Round round = new Round(aFirstTool, aSecondTool);
         String roundText = Console.to(round, settings.isColorful());
         Optional<Tool> winner = round.winner();
         if (winner.isPresent()) {
-            if (winner.get() == aPlayerTool) {
+            if (winner.get() == aFirstTool) {
+                first.inc(aFirstTool, true);
+                second.inc(aFirstTool, false);
                 output.println(roundText + YOU_WIN_MSG);
             } else {
+                first.inc(aFirstTool, false);
+                second.inc(aFirstTool, true);
                 output.println(roundText + COMPUTER_WINS_MSG);
             }
         } else {
             output.println(roundText + DEAD_HEAT_MSG);
         }
-        history.offer(round);
-        if (history.size() > settings.getHistoryLength()) {
-            history.poll();
-        }
     }
 
     /**
-     * Displays a game report. Total number of played rounds, wins count, loses count and
-     * success rate.
+     * Displays a game report. Total number of played rounds, wins count, loses
+     * count and success rate.
      */
     private void report() {
         output.println(NICE_GAME_MSG);

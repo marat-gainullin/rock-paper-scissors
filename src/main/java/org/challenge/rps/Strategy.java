@@ -14,26 +14,29 @@ import java.util.Random;
  */
 public class Strategy {
 
-    private int[] success;
-    private int[] indicies;
+    private final int[] success;
+    private final int[] indicies;
+    private final Tool[] tools;
     private Random uniForm = new Random();
     private static final double LAMBDA = 0.5d;
 
     public Strategy() {
         super();
-        success = new int[Tool.count()];
-        indicies = new int[success.length];
+        tools = Tool.values();
+        indicies = new int[tools.length];
         Arrays.setAll(indicies, (int anIndex) -> {
             return anIndex;
         });
+        success = new int[tools.length];
     }
 
     private void swap(int i, int j) {
-        indicies[i] = j;
-        indicies[j] = i;
-        int tmp = success[i];
+        Tool tmpTool = tools[i];
+        tools[i] = tools[j];
+        tools[j] = tmpTool;
+        int tmpSuccess = success[i];
         success[i] = success[j];
-        success[j] = tmp;
+        success[j] = tmpSuccess;
     }
 
     public void inc(Tool aTool, boolean aSuccess) {
@@ -42,20 +45,26 @@ public class Strategy {
 
         int newIndex = oldIndex;
         do {
-            if (oldIndex  < success.length - 1 && success[oldIndex] > success[oldIndex + 1]) {
+            if (oldIndex < success.length - 1 && success[oldIndex] > success[oldIndex + 1]) {
                 newIndex = oldIndex + 1;
+                Tool newTool = tools[newIndex];
                 swap(oldIndex, newIndex);
+                indicies[aTool.ordinal()] = newIndex;
+                indicies[newTool.ordinal()] = oldIndex;
             } else if (oldIndex > 0 && success[oldIndex] < success[oldIndex - 1]) {
                 newIndex = oldIndex - 1;
+                Tool newTool = tools[newIndex];
                 swap(oldIndex, newIndex);
+                indicies[aTool.ordinal()] = newIndex;
+                indicies[newTool.ordinal()] = oldIndex;
             }
         } while (newIndex != oldIndex);
     }
-    
-    public Tool next(){
+
+    public Tool next() {
         // Exponential distribution
-        double expForm = Math.log(1f - uniForm.nextDouble())/-LAMBDA;
-        long tIndex = Math.round(expForm * Tool.count());
-        return Tool.at(tIndex >= Tool.count() ? Tool.count() - 1 : (int)tIndex);
+        double expForm = Math.log(1d - uniForm.nextDouble()) / -LAMBDA;
+        long tIndex = Math.round(expForm * tools.length);
+        return tools[tIndex >= tools.length ? tools.length - 1 : (int) tIndex];
     }
 }
