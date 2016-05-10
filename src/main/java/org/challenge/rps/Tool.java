@@ -37,9 +37,9 @@ public enum Tool {
     /**
      * Tool enumeration element constructor.
      *
-     * @param aName
+     * @param aName Name of the tool.
      */
-    private Tool(String aName) {
+    Tool(String aName) {
         name = aName;
     }
 

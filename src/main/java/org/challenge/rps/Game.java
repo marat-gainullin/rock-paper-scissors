@@ -111,7 +111,7 @@ public class Game {
      * @param aOutput Console output destination.
      * @param aSettings Settins to be used by this instanceof game.
      */
-    public Game(Scanner aInput, PrintStream aOutput, Settings aSettings) {
+    public Game(final Scanner aInput, final PrintStream aOutput, final Settings aSettings) {
         super();
         input = aInput;
         output = aOutput;
@@ -147,6 +147,8 @@ public class Game {
                     break;
                 case PLAYER:
                     playerComp();
+                    break;
+                default:
                     break;
             }
             mode = Console.from(input, output, modes, Mode.as());
@@ -188,7 +190,7 @@ public class Game {
      * @param aFirstMessage Message displayed when the first tool wins.
      * @param aSecondMessage Message displayed when the second tool wins.
      */
-    private void makeRound(Tool aFirstTool, Tool aSecondTool, String aFirstMessage, String aSecondMessage) {
+    private void makeRound(final Tool aFirstTool, final Tool aSecondTool, final String aFirstMessage, final String aSecondMessage) {
         Round round = new Round(aFirstTool, aSecondTool);
         String roundText = Console.to(round, settings.isColorful());
         Optional<Tool> winner = round.winner();

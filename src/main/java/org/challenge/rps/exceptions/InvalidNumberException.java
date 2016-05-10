@@ -7,18 +7,33 @@ package org.challenge.rps.exceptions;
 
 /**
  * Exception for Console reading methods.
+ *
  * @author mg
  */
 public class InvalidNumberException extends RuntimeException {
 
+    /**
+     * The number, that is unrecognized.
+     */
     private final int number;
 
-    public InvalidNumberException(int aNumber) {
+    /**
+     * The <code>InvalidNumberException</code> constructor with a problem
+     * number.
+     *
+     * @param aNumber The unrecognized number.
+     */
+    public InvalidNumberException(final int aNumber) {
         super();
         number = aNumber;
     }
 
-    public int getNumber() {
+    /**
+     * Unrecognized number getter.
+     *
+     * @return The unrecognized number, this exception is about.
+     */
+    public final int getNumber() {
         return number;
     }
 

@@ -33,9 +33,9 @@ public enum Mode {
     /**
      * Mode enumeration element constructor.
      *
-     * @param aName
+     * @param aName Name of the mode.
      */
-    private Mode(String aName) {
+    Mode(final String aName) {
         name = aName;
     }
 

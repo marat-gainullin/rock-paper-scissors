@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author mg
  */
-public class Settings {
+public final class Settings {
 
     /**
      * Unknown parameter message.
@@ -28,11 +28,14 @@ public class Settings {
      */
     static final String WARN_PERIOD_PARAM = "-warn-period";
     /**
-     * Command line parameter. Colorizes the console output via ANSI/VT100 escape
-     * codes. Just for fun :)
+     * Command line parameter. Colorizes the console output via ANSI/VT100
+     * escape codes. Just for fun :)
      */
     static final String COLORFUL_PARAM = "-colorful";
 
+    /**
+     * Params -> actions mapping.
+     */
     private static final Map<String, BiFunction<String, Settings, Integer>> PARAMS = new HashMap<String, BiFunction<String, Settings, Integer>>() {
         {
             put(WARN_PERIOD_PARAM, (String aValue, Settings aSettings) -> {
@@ -50,14 +53,18 @@ public class Settings {
         }
     };
     /**
-     * Perid to play without a time warning.
+     * Perid to play without a time warning. Default is one hour.
      */
-    private long warnPeriod = 3600000;// 1 Hour
+    private long warnPeriod = 3600000;
     /**
      * Whether console output should be colorized.
      */
     private boolean colorful;
 
+    /**
+     * Default constructor, hidden because of factoy nature of settings
+     * construction.
+     */
     private Settings() {
         super();
     }
@@ -100,11 +107,13 @@ public class Settings {
 
     /**
      * Factory method of <code>Settings</code>. Returns default settings.
-     * @return 
+     *
+     * @return
      */
     public static Settings defaultSettings() {
         return new Settings();
     }
+
     /**
      * Factory method of <code>Settings</code>. Parses Settings from an array of
      * string arguments.
@@ -112,7 +121,7 @@ public class Settings {
      * @param aParams An array of string arguments.
      * @return Settings instance.
      */
-    public static Settings parse(String... aParams) {
+    public static Settings parse(final String... aParams) {
         Settings settings = new Settings();
         int i = 0;
         while (i < aParams.length) {

@@ -10,18 +10,43 @@ import java.util.Random;
 import org.challenge.rps.Tool;
 
 /**
+ * Strategy for selecting of tools with thiers success in mind. Uses sorted
+ * array of exponentioal.
  *
  * @author mg
  */
 public class ExponentialStrategy implements Strategy {
 
+    /**
+     * Sorted array of tools' success counters.
+     */
     private final int[] success;
+    /**
+     * Array of indicies in <code>success</code> array.
+     */
     private final int[] indicies;
+    /**
+     * Array of tools, the strategy selects from.
+     */
     private final Tool[] tools;
+    /**
+     * Uniformly distributed random numbers generator.
+     */
     private final Random random = new Random();
+    /**
+     * Exponential distribution parameter.
+     */
     private static final double LAMBDA = 4d;
+    /**
+     * Uniform treshold. Before number of <code>gainPenalty()</code> calls
+     * increases and overcomes this treshold, simple uniform distribution is
+     * used for tools selection.
+     */
     private int treshold;
 
+    /**
+     * Default constructor of the strategy.
+     */
     public ExponentialStrategy() {
         super();
         tools = Tool.values();
@@ -33,6 +58,13 @@ public class ExponentialStrategy implements Strategy {
         success = new int[tools.length];
     }
 
+    /**
+     * Swap method used to put <code>success</code> array element in right place
+     * according to its success counter value.
+     *
+     * @param i One index has to be swapped.
+     * @param j Another index has to be swapped.
+     */
     private void swap(int i, int j) {
         Tool tmpTool = tools[i];
         tools[i] = tools[j];
@@ -42,17 +74,29 @@ public class ExponentialStrategy implements Strategy {
         success[j] = tmpSuccess;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void gain(Tool aTool) {
+    public final void gain(Tool aTool) {
         gainPenalty(aTool, -1);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void penalty(Tool aTool) {
+    public final void penalty(Tool aTool) {
         gainPenalty(aTool, 1);
     }
-    
-    private void gainPenalty(Tool aTool, int aValue){
+
+    /**
+     * Increases or decreases success counter of the <code>aTool</code>.
+     *
+     * @param aTool A tool success of wich should be modified.
+     * @param aValue A value by wich the tool success should be modified.
+     */
+    private void gainPenalty(Tool aTool, int aValue) {
         if (treshold > 0) {
             treshold--;
         }
@@ -82,6 +126,9 @@ public class ExponentialStrategy implements Strategy {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Tool next() {
         if (treshold > 0) {

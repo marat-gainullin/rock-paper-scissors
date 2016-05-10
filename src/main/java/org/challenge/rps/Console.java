@@ -49,14 +49,20 @@ public class Console {
      * ANSI/VT100 escaped palette. Used for tools highlighting.
      */
     private static final String[] VT100_PALETTE = new String[]{
-         "\u001b[35m" // Magenta
-        ,"\u001b[36m" // Cyan
-        ,"\u001b[32m" // Green
+        "\u001b[35m" // Magenta
+        , "\u001b[36m" // Cyan
+        , "\u001b[32m" // Green
     };
 
     /**
-     * Abstraction for some identified entity from by id from a console.
-     * Detects wrong from and attempts to do it again.
+     * Hidden because of utility nature of the <code>Console</code> class.
+     */
+    private Console() {
+    }
+
+    /**
+     * Abstraction for some identified entity from by id from a console. Detects
+     * wrong from and attempts to do it again.
      *
      * @param <T> Type of the entity.
      * @param aSource A scanner used to from numbers - ids.
@@ -66,7 +72,7 @@ public class Console {
      * @param aFactory Predicate used for actual entity instance creation.
      * @return Creation entity instance.
      */
-    public static <T> Optional<T> from(Scanner aSource, PrintStream aOut, String anAttemptMessge, Function<Integer, Optional<T>> aFactory) {
+    public static <T> Optional<T> from(final Scanner aSource, final PrintStream aOut, final String anAttemptMessge, final Function<Integer, Optional<T>> aFactory) {
         Runnable attempt = () -> {
             aOut.print(anAttemptMessge);
             aOut.print(PROMPT);
@@ -92,20 +98,32 @@ public class Console {
         return entity;
     }
 
-    public static String to(Round aRound, boolean aColorful) {
+    /**
+     * Transforms a <code>Round</code> instance to string representation taking
+     * into account 'colorful' feature.
+     *
+     * @param aRound A <code>Round</code> instance to be transformed to a
+     * string.
+     * @param aColorful True if transformd <code>Round</code> instance should be
+     * rounded with ANSI/VT100 escape sequences.
+     * @return Result of transformation.
+     */
+    public static String to(final Round aRound, final boolean aColorful) {
         StringBuilder content = new StringBuilder();
         if (aColorful) {
-            content 
-                    .append(VT100_PALETTE[aRound.getPlayer1Tool().ordinal() % VT100_PALETTE.length]).append(aRound.getPlayer1Tool().getName()).append(VT100_END)
-                    .append(DELIMITER)
-                    .append(VT100_PALETTE[aRound.getPlayer2Tool().ordinal() % VT100_PALETTE.length]).append(aRound.getPlayer2Tool().getName()).append(VT100_END)
-                    .append(PERIOD);
+            content
+            .append(VT100_PALETTE[aRound.getFirstPlayerTool().ordinal() % VT100_PALETTE.length])
+                    .append(aRound.getFirstPlayerTool().getName()).append(VT100_END)
+            .append(DELIMITER)
+            .append(VT100_PALETTE[aRound.getSecondPlayerTool().ordinal() % VT100_PALETTE.length])
+                    .append(aRound.getSecondPlayerTool().getName()).append(VT100_END)
+            .append(PERIOD);
             return content.toString();
         } else {
             content
-                    .append(aRound.getPlayer1Tool().getName())
+                    .append(aRound.getFirstPlayerTool().getName())
                     .append(DELIMITER)
-                    .append(aRound.getPlayer2Tool().getName())
+                    .append(aRound.getSecondPlayerTool().getName())
                     .append(PERIOD);
             return content.toString();
         }

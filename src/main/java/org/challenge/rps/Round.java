@@ -8,31 +8,56 @@ package org.challenge.rps;
 import java.util.Optional;
 
 /**
- * History entry for made rounds.
+ * Round of a game session.
  *
  * @author mg
  */
 public class Round {
 
-    private final Tool player1Tool;
-    private final Tool player2Tool;
+    /**
+     * First player tool for this round;
+     */
+    private final Tool firstPlayerTool;
+    /**
+     * Second player tool for this round;
+     */
+    private final Tool secondPlayerTool;
 
-    public Round(Tool aPlayer1Tool, Tool aPlayer2Tool) {
-        player1Tool = aPlayer1Tool;
-        player2Tool = aPlayer2Tool;
+    /**
+     * Constructs a round with a pair of tools, selected by players.
+     *
+     * @param aFirstPlayerTool A tool, selected by a first player.
+     * @param aSecondPlayerTool A tool, selected by a second player.
+     */
+    public Round(final Tool aFirstPlayerTool, final Tool aSecondPlayerTool) {
+        firstPlayerTool = aFirstPlayerTool;
+        secondPlayerTool = aSecondPlayerTool;
     }
 
-    public Tool getPlayer1Tool() {
-        return player1Tool;
+    /**
+     * Getter method for first player's tool.
+     * @return First player's tool.
+     */
+    public final Tool getFirstPlayerTool() {
+        return firstPlayerTool;
     }
 
-    public Tool getPlayer2Tool() {
-        return player2Tool;
+    /**
+     * Getter method for second player's tool.
+     * @return Second player's tool.
+     */
+    public final Tool getSecondPlayerTool() {
+        return secondPlayerTool;
     }
 
+    /**
+     * Detemines a winner of this round. In case of tools(weapons) set
+     * extension, this method should be re-implemented.
+     *
+     * @return A winner of this round.
+     */
     public Optional<Tool> winner() {
-        // In case of weapons set extension, this method should be re-implemented.
-        return player1Tool == player2Tool ? Optional.empty() : Optional.of(player1Tool.ordinal() - player2Tool.ordinal() == -1 || player1Tool.ordinal() - player2Tool.ordinal() == 2 ? player1Tool : player2Tool);
+        return firstPlayerTool == secondPlayerTool ? Optional.empty() : Optional.of(firstPlayerTool.ordinal() - secondPlayerTool.ordinal() == -1 || firstPlayerTool.ordinal() - secondPlayerTool.ordinal() == 2 ? firstPlayerTool : secondPlayerTool);
     }
 
 }
