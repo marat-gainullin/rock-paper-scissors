@@ -1,10 +1,10 @@
 package org.challenge.rps;
 
-import org.challenge.rps.strategies.ExponentialStrategy;
 import org.challenge.rps.strategies.Strategy;
 import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
+import org.challenge.rps.strategies.NonUniformRangeStrategy;
 
 /**
  * Main class of the program. Contains high level logic and input/output
@@ -139,8 +139,8 @@ public class Game {
             if (System.currentTimeMillis() - started >= settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
-            first = new ExponentialStrategy();
-            second = new ExponentialStrategy();
+            first = new NonUniformRangeStrategy();
+            second = new NonUniformRangeStrategy();
             switch (mode.get()) {
                 case COMP:
                     compComp();

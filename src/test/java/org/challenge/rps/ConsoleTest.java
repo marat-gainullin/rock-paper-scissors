@@ -8,8 +8,6 @@ package org.challenge.rps;
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import org.challenge.rps.Mode;
-import org.challenge.rps.Console;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

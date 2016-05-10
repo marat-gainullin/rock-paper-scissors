@@ -29,14 +29,14 @@ public class GameTest {
 
     @Test
     public void freshness() throws UnsupportedEncodingException {
-        String sameInput = "1\n0\n0\nq\nq\n";
+        String sameInput = "1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\nq\nq\n";
         int sameGames = 0;
-        for (int g = 0; g < 100000; g++) {
+        for (int g = 0; g < 1000; g++) {
             String gameOutput1 = makeGame(sameInput, Settings.defaultSettings());
             String gameOutput2 = makeGame(sameInput, Settings.defaultSettings());
             sameGames += gameOutput1.equals(gameOutput2) ? 1 : 0;
         }
-        assertTrue(sameGames < 10);
+        assertEquals(0, sameGames);
     }
 
     @Test

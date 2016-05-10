@@ -19,6 +19,10 @@ import java.util.logging.Logger;
 public class Settings {
 
     /**
+     * Unknown parameter message.
+     */
+    private static final String UNKNOWN_PARAMETER_MSG = "Unknown parameter \"{0}\"";
+    /**
      * Command line parameter. Sets time interval after wich, the player is
      * warned about time of the game. codes.
      */
@@ -116,7 +120,7 @@ public class Settings {
             if (handler != null) {
                 i += handler.apply(i < aParams.length - 1 ? aParams[i + 1] : null, settings);
             } else {
-                Logger.getLogger(Game.class.getName()).log(Level.WARNING, "Unknown parameter '{0}'", aParams[i]);
+                Logger.getLogger(Game.class.getName()).log(Level.WARNING, UNKNOWN_PARAMETER_MSG, aParams[i]);
                 i++;
             }
         }

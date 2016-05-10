@@ -6,8 +6,6 @@
 package org.challenge.rps;
 
 import java.util.Optional;
-import org.challenge.rps.Round;
-import org.challenge.rps.Tool;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

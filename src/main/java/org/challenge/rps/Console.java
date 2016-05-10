@@ -18,13 +18,17 @@ public class Console {
      */
     private static final String PROMPT = "q - quit > ";
     /**
+     * Tail of some error messages.
+     */
+    private static final String TRY_AGAIN_MSG = "Try again, please.";
+    /**
      * Error message, when unknown number is entered.
      */
-    private static final String UNKNOWN_NUMBER_MSG = "Unknown number %d. Try again, please.";
+    private static final String UNKNOWN_NUMBER_MSG = "Unknown number %d. " + TRY_AGAIN_MSG;
     /**
      * Error message, when not a number is entered.
      */
-    private static final String NOT_NUMBER_MSG = "'%s' is not a nunmber. Try again, please.";
+    private static final String NOT_NUMBER_MSG = "'%s' is not a nunmber. " + TRY_AGAIN_MSG;
     /**
      * Textual prefix of quit level command.
      */
@@ -77,7 +81,7 @@ public class Console {
                 try {
                     entity = aFactory.apply(Integer.valueOf(line));
                 } catch (NumberFormatException ex) {
-                    aOut.println(String.format(NOT_NUMBER_MSG, line));
+                    aOut.println(line.isEmpty() ? TRY_AGAIN_MSG : String.format(NOT_NUMBER_MSG, line));
                     attempt.run();
                 } catch (InvalidNumberException ex) {
                     aOut.println(String.format(UNKNOWN_NUMBER_MSG, ex.getNumber()));

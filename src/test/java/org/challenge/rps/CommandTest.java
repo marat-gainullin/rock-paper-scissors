@@ -5,7 +5,6 @@
  */
 package org.challenge.rps;
 
-import org.challenge.rps.Mode;
 import org.challenge.rps.exceptions.InvalidNumberException;
 import org.junit.Test;
 

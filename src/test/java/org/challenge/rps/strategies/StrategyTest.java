@@ -6,33 +6,30 @@
 package org.challenge.rps.strategies;
 
 import org.challenge.rps.Tool;
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
  *
  * @author mg
  */
-public class SuccessStrategyTest {
+public abstract class StrategyTest {
 
-    @Test
-    public void gainTest() {
-        Strategy subject = new ExponentialStrategy();
+    public void gain(Strategy aSubject) {
         int rockSuccess = 100;
         for (int s = 0; s < rockSuccess; s++) {
-            subject.gain(Tool.ROCK);
+            aSubject.gain(Tool.ROCK);
         }
         int paperSuccess = 50;
         for (int s = 0; s < paperSuccess; s++) {
-            subject.gain(Tool.PAPER);
+            aSubject.gain(Tool.PAPER);
         }
-        subject.gain(Tool.SCISSORS);// success = 1
+        aSubject.gain(Tool.SCISSORS);// success = 1
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;
         int scissorsCases = 0;
         for (int i = 0; i < totalCases; i++) {
-            switch (subject.next()) {
+            switch (aSubject.next()) {
                 case ROCK:
                     rockCases++;
                     break;
@@ -50,24 +47,22 @@ public class SuccessStrategyTest {
         assertTrue(Math.abs(paperCases - scissorsCases) / (float) totalCases > 0.1f);
     }
 
-    @Test
-    public void penaltyTest() {
-        Strategy subject = new ExponentialStrategy();
+    public void penalty(Strategy aSubject) {
         int rockSuccess = 100;
         for (int s = 0; s < rockSuccess; s++) {
-            subject.penalty(Tool.ROCK);
+            aSubject.penalty(Tool.ROCK);
         }
         int paperSuccess = 50;
         for (int s = 0; s < paperSuccess; s++) {
-            subject.penalty(Tool.PAPER);
+            aSubject.penalty(Tool.PAPER);
         }
-        subject.penalty(Tool.SCISSORS);// success = -1
+        aSubject.penalty(Tool.SCISSORS);// success = -1
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;
         int scissorsCases = 0;
         for (int i = 0; i < totalCases; i++) {
-            switch (subject.next()) {
+            switch (aSubject.next()) {
                 case ROCK:
                     rockCases++;
                     break;
@@ -85,9 +80,7 @@ public class SuccessStrategyTest {
         assertTrue(Math.abs(paperCases - scissorsCases) / (float) totalCases > 0.1f);
     }
 
-    @Test
-    public void uniformTest() {
-        Strategy subject = new ExponentialStrategy();
+    public void uniform(Strategy subject) {
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;
