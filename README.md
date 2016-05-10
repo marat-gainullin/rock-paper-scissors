@@ -48,7 +48,7 @@ To vew code coverage report after `maven clean package` has been executed, go to
 
 To generate project reports (FindBugs, CMD, PMD and CheckStyle), cd into a folder of the project and type `mvn site` on the command line.
 
-To view these report, go to `target/site` subfolder and view `project-reports.html` file in this subfolder with your browser.
+To view these reports, go to `target/site` subfolder and view `project-reports.html` file in this subfolder with your browser.
 
 ## Run
 Cd into a folder of the project and type on the command line `java -jar target/rps-console-1.0.jar` and follow game's instructions to play.
