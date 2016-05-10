@@ -95,4 +95,28 @@ public class ConsoleTest {
             Console.from(in, System.out, "", null);
         }
     }
+
+    /**
+     * Tests reaction of <code>Console.from</code> on an empty text from.
+     *
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
+     */
+    @Test(expected = NoSuchElementException.class)
+    public final void emptyInputWithLf() throws UnsupportedEncodingException {
+        try (Scanner in = new Scanner("\n")) {
+            Console.from(in, System.out, "", null);
+        }
+    }
+
+    /**
+     * Tests colorful output feature.
+     */
+    @Test
+    public final void colorful() {
+        Round round = new Round(Tool.PAPER, Tool.SCISSORS);
+        String colored = Console.to(round, true);
+        assertEquals("[32mPaper[0m - [36mScissors[0m.", colored);
+    }
 }

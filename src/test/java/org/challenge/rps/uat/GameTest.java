@@ -74,7 +74,7 @@ public class GameTest {
      */
     @Test
     public final void compInsteadOfUser() throws UnsupportedEncodingException {
-        String gameOutput = makeGame("0\n\ny\ny\nn\nq\n",
+        String gameOutput = makeGame("0\n\ny\ny\nj\nn\nq\n",
                 Settings.defaultSettings());
         assertTrue(gameOutput.contains("Let computer make your choice?"));
     }

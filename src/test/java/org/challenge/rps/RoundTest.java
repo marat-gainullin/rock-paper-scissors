@@ -63,5 +63,4 @@ public class RoundTest {
         beat(Tool.SCISSORS, Tool.ROCK, Tool.ROCK);
         beat(Tool.PAPER, Tool.SCISSORS, Tool.SCISSORS);
     }
-
 }
