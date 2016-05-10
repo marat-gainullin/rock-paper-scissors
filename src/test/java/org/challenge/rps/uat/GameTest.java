@@ -1,5 +1,6 @@
 package org.challenge.rps.uat;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -107,5 +108,19 @@ public class GameTest {
         String gameOutput = makeGame("1\n0\n0\nq\n1\n0\nq\nq\n",
                 Settings.parse("-warn-period", "0"));
         assertTrue(gameOutput.contains("time is up"));
+    }
+
+    /**
+     * Tests run method of the <code>Game</code> class.
+     *
+     * @throws java.io.UnsupportedEncodingException From String.getBytes()
+     * @see String#getBytes()
+     */
+    @Test
+    public final void runTest() throws UnsupportedEncodingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Game.run(new String[]{},
+                new ByteArrayInputStream("q\n".getBytes("utf-8")),
+                new PrintStream(out, true));
     }
 }

@@ -1,5 +1,6 @@
 package org.challenge.rps;
 
+import java.io.InputStream;
 import org.challenge.rps.strategies.Strategy;
 import java.io.PrintStream;
 import java.util.Optional;
@@ -86,9 +87,20 @@ public class Game {
      * system.
      */
     public static void main(final String[] args) {
-        try (Scanner source = new Scanner(System.in, UTF8)) {
+        run(args, System.in, System.out);
+    }
+
+    /**
+     * Runs the game with arnitrary input and output streams and arguments.
+     * @param args Command line arguments passed from client code.
+     * @param aIn An InputStream the input to be read from.
+     * @param aOut A PrintStream the output to be written to.
+     */
+    public static void run(final String[] args,
+            final InputStream aIn, final PrintStream aOut) {
+        try (Scanner source = new Scanner(aIn, UTF8)) {
             Settings parsed = Settings.parse(args);
-            Game game = new Game(source, System.out, parsed);
+            Game game = new Game(source, aOut, parsed);
             game.start();
         }
     }

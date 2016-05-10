@@ -43,8 +43,12 @@ Since Java 8 is installed, everything is ready to run the game.
 
 ## Build
 To build the game you need Maven, cd into a folder of the project and type `mvn clean package` on the command line.
-To vew code coverage report after `maven clean package` has been executed, go to target/site/jacoco sufolder and view index.html in this subfolder with your browser.
+
+To vew code coverage report after `maven clean package` has been executed, go to `target/site/jacoco` subfolder and view `index.html` file in this subfolder with your browser.
+
 To generate project reports (FindBugs, CMD, PMD and CheckStyle), cd into a folder of the project and type `mvn site` on the command line.
+
+To view these report, go to `target/site` subfolder and view `project-reports.html` file in this subfolder with your browser.
 
 ## Run
 Cd into a folder of the project and type on the command line `java -jar target/rps-console-1.0.jar` and follow game's instructions to play.
