@@ -34,6 +34,8 @@ Exponential strategy has a disadvantage while selecting among uniformly succeesi
 If you want to add tools(weapons) and transform the game into anothe game, you should add new tools to `Tool` enumeration and re-implement `Round.winner()` method.
 Also, you should refactor `Round` tests.
 
+The example of what you have to do to extend the game is on the "extension" branch.
+
 ## Install
 The game requires Java 8 to be installed.
 Since Java 8 is installed, everything is ready to run the game.
@@ -43,4 +45,4 @@ To build the game you need Maven.
 Cd into a folder of the project and type `mvn package` on the command line.
 
 ## Run
-Type on the command line `java -jar rps-console-1.0` and follow game's prompt to play.
+Cd into a folder of the project and type on the command line `java -jar target/rps-console-1.0.jar` and follow game's prompt to play.
