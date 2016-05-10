@@ -62,7 +62,7 @@ public class Game {
      * Hello message, printed at the begining.
      */
     private static final String HELLO_MSG
-            = "Let's play \"rock, paper, scissors\" :)";
+            = "Let's play \"rock, paper, scissors, lizard, spock\" :)";
     /**
      * General strings encoding name.
      */

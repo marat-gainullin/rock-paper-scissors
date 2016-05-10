@@ -22,7 +22,15 @@ public enum Tool {
     /**
      * The "Paper" tool.
      */
-    PAPER("Paper");
+    PAPER("Paper"),
+    /**
+     * The "Paper" tool.
+     */
+    LIZARD("Lizard"),
+    /**
+     * The "Paper" tool.
+     */
+    SPOCK("Spock");
 
     /**
      * Name of the tool element.

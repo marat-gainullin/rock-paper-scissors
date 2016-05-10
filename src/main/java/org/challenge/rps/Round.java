@@ -51,6 +51,8 @@ public class Round {
      * Detemines a winner of this round. In case of tools(weapons) set
      * extension, this method should be re-implemented.
      *
+     * In this branch "extension" this method MUST be re-implemented because of additional tools.
+     * 
      * @return A winner of this round.
      */
     public final Optional<Tool> winner() {
