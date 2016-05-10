@@ -13,7 +13,7 @@ import org.challenge.rps.Tool;
  *
  * @author mg
  */
-public class SuccessStrategy implements Strategy {
+public class ExponentialStrategy implements Strategy {
 
     private final int[] success;
     private final int[] indicies;
@@ -22,7 +22,7 @@ public class SuccessStrategy implements Strategy {
     private static final double LAMBDA = 4d;
     private int treshold;
 
-    public SuccessStrategy() {
+    public ExponentialStrategy() {
         super();
         tools = Tool.values();
         treshold = tools.length;
@@ -43,13 +43,22 @@ public class SuccessStrategy implements Strategy {
     }
 
     @Override
-    public void used(Tool aTool, boolean aSuccess) {
+    public void gain(Tool aTool) {
+        gainPenalty(aTool, -1);
+    }
+    
+    @Override
+    public void penalty(Tool aTool) {
+        gainPenalty(aTool, 1);
+    }
+    
+    private void gainPenalty(Tool aTool, int aValue){
         if (treshold > 0) {
             treshold--;
         }
 
         int oldIndex = indicies[aTool.ordinal()];
-        success[oldIndex] += aSuccess ? -1 : 1;
+        success[oldIndex] += aValue;
 
         int newIndex;
         while (true) {

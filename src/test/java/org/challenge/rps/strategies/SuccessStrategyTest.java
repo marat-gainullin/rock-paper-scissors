@@ -16,17 +16,17 @@ import static org.junit.Assert.assertTrue;
 public class SuccessStrategyTest {
 
     @Test
-    public void winTest() {
-        Strategy subject = new SuccessStrategy();
+    public void gainTest() {
+        Strategy subject = new ExponentialStrategy();
         int rockSuccess = 100;
         for (int s = 0; s < rockSuccess; s++) {
-            subject.used(Tool.ROCK, true);
+            subject.gain(Tool.ROCK);
         }
         int paperSuccess = 50;
         for (int s = 0; s < paperSuccess; s++) {
-            subject.used(Tool.PAPER, true);
+            subject.gain(Tool.PAPER);
         }
-        subject.used(Tool.SCISSORS, true);// success = 1
+        subject.gain(Tool.SCISSORS);// success = 1
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;
@@ -51,17 +51,17 @@ public class SuccessStrategyTest {
     }
 
     @Test
-    public void loseTest() {
-        Strategy subject = new SuccessStrategy();
+    public void penaltyTest() {
+        Strategy subject = new ExponentialStrategy();
         int rockSuccess = 100;
         for (int s = 0; s < rockSuccess; s++) {
-            subject.used(Tool.ROCK, false);
+            subject.penalty(Tool.ROCK);
         }
         int paperSuccess = 50;
         for (int s = 0; s < paperSuccess; s++) {
-            subject.used(Tool.PAPER, false);
+            subject.penalty(Tool.PAPER);
         }
-        subject.used(Tool.SCISSORS, false);// success = -1
+        subject.penalty(Tool.SCISSORS);// success = -1
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;
@@ -87,7 +87,7 @@ public class SuccessStrategyTest {
 
     @Test
     public void uniformTest() {
-        Strategy subject = new SuccessStrategy();
+        Strategy subject = new ExponentialStrategy();
         int totalCases = 1000000;
         int rockCases = 0;
         int paperCases = 0;

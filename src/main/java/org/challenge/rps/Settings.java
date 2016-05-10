@@ -82,7 +82,7 @@ public class Settings {
      * @param aValue Period of time in milliseconds.
      */
     private void setWarnPeriod(long aValue) {
-        warnPeriod = aValue;
+        warnPeriod = aValue >= 0 ? aValue : 0;
     }
 
     /**

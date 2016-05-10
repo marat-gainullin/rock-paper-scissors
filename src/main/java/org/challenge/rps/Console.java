@@ -38,12 +38,16 @@ public class Console {
      */
     private static final String PERIOD = ".";
     /**
+     * ANSI/VT100 escaped clear of attributes. Used for tools highlighting.
+     */
+    private static final String VT100_END = "\u001b[0m";
+    /**
      * ANSI/VT100 escaped palette. Used for tools highlighting.
      */
-    private static final String[] PALETTE = new String[]{
-         "\u001b[35m%s\u001b[0m" // Magenta
-        ,"\u001b[36m%s\u001b[0m" // Cyan
-        ,"\u001b[32m%s\u001b[0m" // Green
+    private static final String[] VT100_PALETTE = new String[]{
+         "\u001b[35m" // Magenta
+        ,"\u001b[36m" // Cyan
+        ,"\u001b[32m" // Green
     };
 
     /**
@@ -88,9 +92,9 @@ public class Console {
         StringBuilder content = new StringBuilder();
         if (aColorful) {
             content 
-                    .append(String.format(PALETTE[aRound.getPlayer1Tool().ordinal() % PALETTE.length], aRound.getPlayer1Tool().getName()))
+                    .append(VT100_PALETTE[aRound.getPlayer1Tool().ordinal() % VT100_PALETTE.length]).append(aRound.getPlayer1Tool().getName()).append(VT100_END)
                     .append(DELIMITER)
-                    .append(String.format(PALETTE[aRound.getPlayer2Tool().ordinal() % PALETTE.length], aRound.getPlayer2Tool().getName()))
+                    .append(VT100_PALETTE[aRound.getPlayer2Tool().ordinal() % VT100_PALETTE.length]).append(aRound.getPlayer2Tool().getName()).append(VT100_END)
                     .append(PERIOD);
             return content.toString();
         } else {

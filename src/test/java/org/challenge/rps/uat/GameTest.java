@@ -18,7 +18,7 @@ import org.junit.Test;
  *
  * @author mg
  */
-public class GameIT {
+public class GameTest {
 
     private String makeGame(String aPlayerInput, Settings aSettings) throws UnsupportedEncodingException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -53,7 +53,7 @@ public class GameIT {
 
     @Test
     public void timePeriod() throws UnsupportedEncodingException {
-        String gameOutput = makeGame("1\n0\n0\nq\n1\n0\nq\nq\n", Settings.parse("-warn-period", "-1"));
+        String gameOutput = makeGame("1\n0\n0\nq\n1\n0\nq\nq\n", Settings.parse("-warn-period", "0"));
         assertTrue(gameOutput.contains("time is up"));
     }
 }

@@ -29,6 +29,12 @@ public class SettingsTest {
     }
 
     @Test
+    public void parseWrongWarnPeriod() {
+        Settings parsed = Settings.parse(Settings.WARN_PERIOD_PARAM, String.valueOf("-1"));
+        assertEquals(0, parsed.getWarnPeriod());
+    }
+
+    @Test
     public void parseBadWarnPeriod() {
         Settings parsed = Settings.parse(Settings.WARN_PERIOD_PARAM, "NaN");
         assertEquals(3600000, parsed.getWarnPeriod());

@@ -1,6 +1,6 @@
 package org.challenge.rps;
 
-import org.challenge.rps.strategies.SuccessStrategy;
+import org.challenge.rps.strategies.ExponentialStrategy;
 import org.challenge.rps.strategies.Strategy;
 import java.io.PrintStream;
 import java.util.Optional;
@@ -136,11 +136,11 @@ public class Game {
         String modes = Console.modes();
         Optional<Mode> mode = Console.from(input, output, modes, Mode.as());
         while (mode.isPresent()) {
-            if (System.currentTimeMillis() - started > settings.getWarnPeriod()) {
+            if (System.currentTimeMillis() - started >= settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
-            first = new SuccessStrategy();
-            second = new SuccessStrategy();
+            first = new ExponentialStrategy();
+            second = new ExponentialStrategy();
             switch (mode.get()) {
                 case COMP:
                     compComp();
@@ -194,12 +194,12 @@ public class Game {
         Optional<Tool> winner = round.winner();
         if (winner.isPresent()) {
             if (winner.get() == aFirstTool) {
-                first.used(aFirstTool, true);
-                second.used(aFirstTool, false);
+                first.gain(aFirstTool);
+                second.penalty(aFirstTool);
                 output.println(roundText + aFirstMessage);
             } else {
-                first.used(aFirstTool, false);
-                second.used(aFirstTool, true);
+                first.penalty(aFirstTool);
+                second.gain(aFirstTool);
                 output.println(roundText + aSecondMessage);
             }
         } else {

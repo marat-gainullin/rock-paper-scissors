@@ -13,7 +13,9 @@ import org.challenge.rps.Tool;
  */
 public interface Strategy {
 
-    public void used(Tool aTool, boolean aSuccess);
+    public void gain(Tool aTool);
+
+    public void penalty(Tool aTool);
     
     public Tool next();
 }
