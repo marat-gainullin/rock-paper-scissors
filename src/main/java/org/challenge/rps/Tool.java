@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import java.util.Optional;
@@ -39,7 +34,7 @@ public enum Tool {
      *
      * @param aName Name of the tool.
      */
-    Tool(String aName) {
+    Tool(final String aName) {
         name = aName;
     }
 

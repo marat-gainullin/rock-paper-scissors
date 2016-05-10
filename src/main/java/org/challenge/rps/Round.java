@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import java.util.Optional;
@@ -15,39 +10,41 @@ import java.util.Optional;
 public class Round {
 
     /**
-     * First player tool for this round;
+     * First player tool for this round.
      */
-    private final Tool firstPlayerTool;
+    private final Tool firstTool;
     /**
-     * Second player tool for this round;
+     * Second player tool for this round.
      */
-    private final Tool secondPlayerTool;
+    private final Tool secondTool;
 
     /**
      * Constructs a round with a pair of tools, selected by players.
      *
-     * @param aFirstPlayerTool A tool, selected by a first player.
-     * @param aSecondPlayerTool A tool, selected by a second player.
+     * @param aFirstTool A tool, selected by a first player.
+     * @param aSecondTool A tool, selected by a second player.
      */
-    public Round(final Tool aFirstPlayerTool, final Tool aSecondPlayerTool) {
-        firstPlayerTool = aFirstPlayerTool;
-        secondPlayerTool = aSecondPlayerTool;
+    public Round(final Tool aFirstTool, final Tool aSecondTool) {
+        firstTool = aFirstTool;
+        secondTool = aSecondTool;
     }
 
     /**
      * Getter method for first player's tool.
+     *
      * @return First player's tool.
      */
-    public final Tool getFirstPlayerTool() {
-        return firstPlayerTool;
+    public final Tool getFirstTool() {
+        return firstTool;
     }
 
     /**
      * Getter method for second player's tool.
+     *
      * @return Second player's tool.
      */
-    public final Tool getSecondPlayerTool() {
-        return secondPlayerTool;
+    public final Tool getSecondTool() {
+        return secondTool;
     }
 
     /**
@@ -56,8 +53,16 @@ public class Round {
      *
      * @return A winner of this round.
      */
-    public Optional<Tool> winner() {
-        return firstPlayerTool == secondPlayerTool ? Optional.empty() : Optional.of(firstPlayerTool.ordinal() - secondPlayerTool.ordinal() == -1 || firstPlayerTool.ordinal() - secondPlayerTool.ordinal() == 2 ? firstPlayerTool : secondPlayerTool);
+    public final Optional<Tool> winner() {
+        if (firstTool == secondTool) {
+            return Optional.empty();
+        } else if (firstTool.ordinal() - secondTool.ordinal() == -1
+                || firstTool.ordinal() - secondTool.ordinal() == 2) {
+            return Optional.of(firstTool);
+
+        } else {
+            return Optional.of(secondTool);
+        }
     }
 
 }

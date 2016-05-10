@@ -1,21 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import org.challenge.rps.exceptions.InvalidNumberException;
 import org.junit.Test;
 
 /**
- *
+ * Tests for <code>Tool</code> enum.
  * @author mg
  */
 public class ToolTest {
 
+    /**
+     * Tests for <code>Tool.as()</code> predicate. Tests wrong number outcome.
+     */
     @Test(expected = InvalidNumberException.class)
-    public void asTest() {
+    public final void asTest() {
         Tool.as().apply(Tool.values().length);
     }
 }

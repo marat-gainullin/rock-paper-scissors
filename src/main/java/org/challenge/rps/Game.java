@@ -25,11 +25,13 @@ public class Game {
     /**
      * Your computer win message.
      */
-    private static final String YOUR_COMPUTER_WIN_MSG = " Your computer wins!";
+    private static final String YOUR_COMPUTER_WIN_MSG
+            = " Your computer wins!";
     /**
      * Your computer win message.
      */
-    private static final String FOREIGN_COMPUTER_WIN_MSG = " Foreign computer wins!";
+    private static final String FOREIGN_COMPUTER_WIN_MSG
+            = " Foreign computer wins!";
     /**
      * Dead heat message.
      */
@@ -37,7 +39,8 @@ public class Game {
     /**
      * Good bye message.
      */
-    private static final String GOOD_BYE_MSG = "Good bye. See you next time :)";
+    private static final String GOOD_BYE_MSG
+            = "Good bye. See you next time :)";
     /**
      * 'y' answer message.
      */
@@ -45,11 +48,13 @@ public class Game {
     /**
      * Constant with computers start message.
      */
-    private static final String COMPUTERS_ROUND_MSG = "Let computer make your choice? (Y/n)";
+    private static final String COMPUTERS_ROUND_MSG
+            = "Let computer make your choice? (Y/n)";
     /**
      * Hello message, printed at the begining.
      */
-    private static final String HELLO_MSG = "Let's play \"rock, paper, scissors\" :)";
+    private static final String HELLO_MSG
+            = "Let's play \"rock, paper, scissors\" :)";
     /**
      * General strings encoding name.
      */
@@ -58,7 +63,8 @@ public class Game {
      * Message with time warning. It is displayed when period of time intended
      * to play is elapsed.
      */
-    private static final String TIME_WARN_MESSAGE = "The time is up. Let's call it a day.";
+    private static final String TIME_WARN_MESSAGE
+            = "The time is up. Let's call it a day.";
     /**
      * Nice game message. It is displayed when Computer vs. Computer or Player
      * vs. Computer session ends.
@@ -68,11 +74,13 @@ public class Game {
     /**
      * Entry-point method of the program.
      *
-     * @param args
+     * @param args Command line arguments passed from outside by operating
+     * system.
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try (Scanner source = new Scanner(System.in, UTF8)) {
-            Game game = new Game(source, System.out, Settings.parse(args));
+            Settings parsed = Settings.parse(args);
+            Game game = new Game(source, System.out, parsed);
             game.start();
         }
     }
@@ -111,7 +119,9 @@ public class Game {
      * @param aOutput Console output destination.
      * @param aSettings Settins to be used by this instanceof game.
      */
-    public Game(final Scanner aInput, final PrintStream aOutput, final Settings aSettings) {
+    public Game(final Scanner aInput,
+            final PrintStream aOutput,
+            final Settings aSettings) {
         super();
         input = aInput;
         output = aOutput;
@@ -121,7 +131,7 @@ public class Game {
     /**
      * Starts a new game.
      */
-    public void start() {
+    public final void start() {
         started = System.currentTimeMillis();
         output.println(Game.HELLO_MSG);
         output.println();
@@ -136,7 +146,8 @@ public class Game {
         String modes = Console.modes();
         Optional<Mode> mode = Console.from(input, output, modes, Mode.as());
         while (mode.isPresent()) {
-            if (System.currentTimeMillis() - started >= settings.getWarnPeriod()) {
+            long now = System.currentTimeMillis();
+            if (now - started >= settings.getWarnPeriod()) {
                 output.println(TIME_WARN_MESSAGE);
             }
             first = new NonUniformRangeStrategy();
@@ -162,7 +173,8 @@ public class Game {
         output.print(COMPUTERS_ROUND_MSG);
         String line = input.nextLine();
         while (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
-            makeRound(first.next(), second.next(), YOUR_COMPUTER_WIN_MSG, FOREIGN_COMPUTER_WIN_MSG);
+            makeRound(first.next(), second.next(),
+                    YOUR_COMPUTER_WIN_MSG, FOREIGN_COMPUTER_WIN_MSG);
             output.print(COMPUTERS_ROUND_MSG);
             line = input.nextLine();
         }
@@ -175,7 +187,8 @@ public class Game {
         String tools = Console.tools();
         Optional<Tool> tool = Console.from(input, output, tools, Tool.as());
         while (tool.isPresent()) {
-            makeRound(tool.get(), second.next(), YOU_WIN_MSG, COMPUTER_WINS_MSG);
+            makeRound(tool.get(), second.next(),
+                    YOU_WIN_MSG, COMPUTER_WINS_MSG);
             tool = Console.from(input, output, tools, Tool.as());
         }
         report();
@@ -190,7 +203,8 @@ public class Game {
      * @param aFirstMessage Message displayed when the first tool wins.
      * @param aSecondMessage Message displayed when the second tool wins.
      */
-    private void makeRound(final Tool aFirstTool, final Tool aSecondTool, final String aFirstMessage, final String aSecondMessage) {
+    private void makeRound(final Tool aFirstTool, final Tool aSecondTool,
+            final String aFirstMessage, final String aSecondMessage) {
         Round round = new Round(aFirstTool, aSecondTool);
         String roundText = Console.to(round, settings.isColorful());
         Optional<Tool> winner = round.winner();

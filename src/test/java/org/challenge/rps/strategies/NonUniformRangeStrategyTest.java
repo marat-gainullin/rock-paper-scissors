@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps.strategies;
 
 import org.junit.Test;
@@ -13,18 +8,27 @@ import org.junit.Test;
  */
 public class NonUniformRangeStrategyTest extends StrategyTest {
 
+    /**
+     * Test of gain with non uniform range strategy.
+     */
     @Test
-    public void gainTest() {
+    public final void gainTest() {
         gain(new NonUniformRangeStrategy());
     }
 
+    /**
+     * Test of penalty with non uniform range strategy.
+     */
     @Test
-    public void penaltyTest() {
+    public final void penaltyTest() {
         penalty(new NonUniformRangeStrategy());
     }
 
+    /**
+     * Test of uniform with non uniform range strategy.
+     */
     @Test
-    public void uniformTest() {
+    public final void uniformTest() {
         uniform(new NonUniformRangeStrategy());
     }
 }

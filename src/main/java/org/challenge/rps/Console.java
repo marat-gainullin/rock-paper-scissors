@@ -11,7 +11,7 @@ import org.challenge.rps.exceptions.InvalidNumberException;
  *
  * @author mg
  */
-public class Console {
+public final class Console {
 
     /**
      * Prompt message for a player.
@@ -24,11 +24,13 @@ public class Console {
     /**
      * Error message, when unknown number is entered.
      */
-    private static final String UNKNOWN_NUMBER_MSG = "Unknown number %d. " + TRY_AGAIN_MSG;
+    private static final String UNKNOWN_NUMBER_MSG = "Unknown number %d. "
+            + TRY_AGAIN_MSG;
     /**
      * Error message, when not a number is entered.
      */
-    private static final String NOT_NUMBER_MSG = "'%s' is not a nunmber. " + TRY_AGAIN_MSG;
+    private static final String NOT_NUMBER_MSG = "'%s' is not a nunmber. "
+            + TRY_AGAIN_MSG;
     /**
      * Textual prefix of quit level command.
      */
@@ -49,9 +51,9 @@ public class Console {
      * ANSI/VT100 escaped palette. Used for tools highlighting.
      */
     private static final String[] VT100_PALETTE = new String[]{
-        "\u001b[35m" // Magenta
-        , "\u001b[36m" // Cyan
-        , "\u001b[32m" // Green
+        "\u001b[35m", // Magenta
+        "\u001b[36m", // Cyan
+        "\u001b[32m" // Green
     };
 
     /**
@@ -72,7 +74,9 @@ public class Console {
      * @param aFactory Predicate used for actual entity instance creation.
      * @return Creation entity instance.
      */
-    public static <T> Optional<T> from(final Scanner aSource, final PrintStream aOut, final String anAttemptMessge, final Function<Integer, Optional<T>> aFactory) {
+    public static <T> Optional<T> from(final Scanner aSource,
+            final PrintStream aOut, final String anAttemptMessge,
+            final Function<Integer, Optional<T>> aFactory) {
         Runnable attempt = () -> {
             aOut.print(anAttemptMessge);
             aOut.print(PROMPT);
@@ -87,10 +91,16 @@ public class Console {
                 try {
                     entity = aFactory.apply(Integer.valueOf(line));
                 } catch (NumberFormatException ex) {
-                    aOut.println(line.isEmpty() ? TRY_AGAIN_MSG : String.format(NOT_NUMBER_MSG, line));
+                    if (line.isEmpty()) {
+                        aOut.println(TRY_AGAIN_MSG);
+                    } else {
+                        aOut.println(String.format(
+                                NOT_NUMBER_MSG, line));
+                    }
                     attempt.run();
                 } catch (InvalidNumberException ex) {
-                    aOut.println(String.format(UNKNOWN_NUMBER_MSG, ex.getNumber()));
+                    aOut.println(String.format(
+                            UNKNOWN_NUMBER_MSG, ex.getNumber()));
                     attempt.run();
                 }
             }
@@ -112,18 +122,26 @@ public class Console {
         StringBuilder content = new StringBuilder();
         if (aColorful) {
             content
-            .append(VT100_PALETTE[aRound.getFirstPlayerTool().ordinal() % VT100_PALETTE.length])
-                    .append(aRound.getFirstPlayerTool().getName()).append(VT100_END)
-            .append(DELIMITER)
-            .append(VT100_PALETTE[aRound.getSecondPlayerTool().ordinal() % VT100_PALETTE.length])
-                    .append(aRound.getSecondPlayerTool().getName()).append(VT100_END)
-            .append(PERIOD);
+                    .append(VT100_PALETTE[aRound
+                            .getFirstTool()
+                            .ordinal() % VT100_PALETTE.length])
+                    .append(aRound
+                            .getFirstTool()
+                            .getName()).append(VT100_END)
+                    .append(DELIMITER)
+                    .append(VT100_PALETTE[aRound
+                            .getSecondTool()
+                            .ordinal() % VT100_PALETTE.length])
+                    .append(aRound
+                            .getSecondTool()
+                            .getName()).append(VT100_END)
+                    .append(PERIOD);
             return content.toString();
         } else {
             content
-                    .append(aRound.getFirstPlayerTool().getName())
+                    .append(aRound.getFirstTool().getName())
                     .append(DELIMITER)
-                    .append(aRound.getSecondPlayerTool().getName())
+                    .append(aRound.getSecondTool().getName())
                     .append(PERIOD);
             return content.toString();
         }

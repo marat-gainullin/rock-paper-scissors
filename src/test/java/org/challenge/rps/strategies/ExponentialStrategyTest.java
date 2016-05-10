@@ -1,30 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps.strategies;
 
 import org.junit.Test;
 
 /**
- *
+ * Tests for <code>ExponentialStrategy</code> class.
  * @author mg
  */
 public class ExponentialStrategyTest extends StrategyTest {
 
+    /**
+     * Test of gain with exponential strategy.
+     */
     @Test
-    public void gainTest() {
+    public final void gainTest() {
         gain(new ExponentialStrategy());
     }
 
+    /**
+     * Test of penalty with exponential strategy.
+     */
     @Test
-    public void penaltyTest() {
+    public final void penaltyTest() {
         penalty(new ExponentialStrategy());
     }
 
+    /**
+     * Test of uniform with exponential strategy.
+     */
     @Test
-    public void uniformTest() {
+    public final void uniformTest() {
         uniform(new ExponentialStrategy());
     }
 

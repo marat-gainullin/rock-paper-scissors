@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for Console.
@@ -19,51 +16,63 @@ import static org.junit.Assert.*;
 public class ConsoleTest {
 
     /**
-     * Tests wether correctg and known from leads to exepected command
- creation.
+     * Tests wether correctg and known from leads to exepected command creation.
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
      */
     @Test
-    public void correctKnownInput() throws UnsupportedEncodingException {
+    public final void correctKnownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("0\n")) {
-            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
+            assertSame(Mode.COMP, Console.from(
+                    in, System.out,
+                    "", Mode.as()).get());
         }
     }
 
     /**
      * Tests wether incorrect from is overcomed, and known command is created.
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
      */
     @Test
-    public void incorrectInput() throws UnsupportedEncodingException {
+    public final void incorrectInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("blah blah blah\n0\n")) {
-            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
+            assertSame(Mode.COMP, Console.from(
+                    in, System.out, "",
+                    Mode.as()).get());
         }
     }
 
     /**
-     * Tests wether correct, but unknown from is overcomed, and known command
- is created.
+     * Tests wether correct, but unknown from is overcomed, and known command is
+     * created.
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
      */
     @Test
-    public void unknownInput() throws UnsupportedEncodingException {
+    public final void unknownInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("10\n0\n")) {
-            assertSame(Mode.COMP, Console.from(in, System.out, "", Mode.as()).get());
+            assertSame(Mode.COMP, Console.from(in, System.out,
+                    "", Mode.as()).get());
         }
     }
 
     /**
-     * Tests reaction of <code>Console.from</code> on an exception while
- text from.
+     * Tests reaction of <code>Console.from</code> on an exception while text
+     * from.
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
      */
     @Test(expected = IllegalStateException.class)
-    public void interruptedInput() throws UnsupportedEncodingException {
+    public final void interruptedInput() throws UnsupportedEncodingException {
         Integer expectedInput = 2;
         try (Scanner in = new Scanner(expectedInput.toString())) {
             assertNull(Console.from(in, System.out, "", (Integer aOrdinal) -> {
@@ -74,13 +83,14 @@ public class ConsoleTest {
     }
 
     /**
-     * Tests reaction of <code>Console.from</code> on an empty text
- from.
+     * Tests reaction of <code>Console.from</code> on an empty text from.
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException From <code>Console.from()</code>
+     * @see Console#from(java.util.Scanner, java.io.PrintStream,
+     * java.lang.String, java.util.function.Function)
      */
     @Test(expected = NoSuchElementException.class)
-    public void emptyInput() throws UnsupportedEncodingException {
+    public final void emptyInput() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("")) {
             Console.from(in, System.out, "", null);
         }

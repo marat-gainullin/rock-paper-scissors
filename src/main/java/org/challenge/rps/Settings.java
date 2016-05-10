@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.challenge.rps;
 
 import java.util.HashMap;
@@ -21,7 +16,8 @@ public final class Settings {
     /**
      * Unknown parameter message.
      */
-    private static final String UNKNOWN_PARAMETER_MSG = "Unknown parameter \"{0}\"";
+    private static final String UNKNOWN_PARAM_MSG = ""
+            + "Unknown parameter \"{0}\"";
     /**
      * Command line parameter. Sets time interval after wich, the player is
      * warned about time of the game. codes.
@@ -32,17 +28,31 @@ public final class Settings {
      * escape codes. Just for fun :)
      */
     static final String COLORFUL_PARAM = "-colorful";
+    /**
+     * Default value for period to play without a time warning parameter - 1
+     * hour.
+     */
+    static final int DEFAULT_WARN_PERIOD = 3600000;
+
+    /**
+     * Handler interface of Settings parsers.
+     */
+    private interface SettingsHandler
+            extends BiFunction<String, Settings, Integer> {
+    }
 
     /**
      * Params -> actions mapping.
      */
-    private static final Map<String, BiFunction<String, Settings, Integer>> PARAMS = new HashMap<String, BiFunction<String, Settings, Integer>>() {
+    private static final Map<String, SettingsHandler> PARAMS
+            = new HashMap<String, SettingsHandler>() {
         {
             put(WARN_PERIOD_PARAM, (String aValue, Settings aSettings) -> {
                 try {
                     aSettings.setWarnPeriod(Long.valueOf(aValue));
                 } catch (NumberFormatException ex) {
-                    Logger.getLogger(Game.class.getName()).log(Level.WARNING, ex.toString());
+                    Logger.getLogger(Game.class.getName())
+                            .log(Level.WARNING, ex.toString());
                 }
                 return 2;
             });
@@ -53,9 +63,9 @@ public final class Settings {
         }
     };
     /**
-     * Perid to play without a time warning. Default is one hour.
+     * Period to play without a time warning. Default is one hour.
      */
-    private long warnPeriod = 3600000;
+    private long warnPeriod = DEFAULT_WARN_PERIOD;
     /**
      * Whether console output should be colorized.
      */
@@ -92,8 +102,12 @@ public final class Settings {
      *
      * @param aValue Period of time in milliseconds.
      */
-    private void setWarnPeriod(long aValue) {
-        warnPeriod = aValue >= 0 ? aValue : 0;
+    private void setWarnPeriod(final long aValue) {
+        if (aValue >= 0) {
+            warnPeriod = aValue;
+        } else {
+            warnPeriod = 0;
+        }
     }
 
     /**
@@ -101,14 +115,14 @@ public final class Settings {
      *
      * @param aValue True if console output should be colorized.
      */
-    private void setColorful(boolean aValue) {
+    private void setColorful(final boolean aValue) {
         colorful = aValue;
     }
 
     /**
      * Factory method of <code>Settings</code>. Returns default settings.
      *
-     * @return
+     * @return <code>Settings</code> instance with default values.
      */
     public static Settings defaultSettings() {
         return new Settings();
@@ -119,17 +133,25 @@ public final class Settings {
      * string arguments.
      *
      * @param aParams An array of string arguments.
-     * @return Settings instance.
+     * @return Settings instance with values parsed from a parameter.
      */
     public static Settings parse(final String... aParams) {
         Settings settings = new Settings();
         int i = 0;
         while (i < aParams.length) {
-            BiFunction<String, Settings, Integer> handler = PARAMS.get(aParams[i]);
+            BiFunction<String, Settings, Integer> handler
+                    = PARAMS.get(aParams[i]);
             if (handler != null) {
-                i += handler.apply(i < aParams.length - 1 ? aParams[i + 1] : null, settings);
+                String paramValue;
+                if (i < aParams.length - 1) {
+                    paramValue = aParams[i + 1];
+                } else {
+                    paramValue = null;
+                }
+                i += handler.apply(paramValue, settings);
             } else {
-                Logger.getLogger(Game.class.getName()).log(Level.WARNING, UNKNOWN_PARAMETER_MSG, aParams[i]);
+                Logger.getLogger(Game.class.getName())
+                        .log(Level.WARNING, UNKNOWN_PARAM_MSG, aParams[i]);
                 i++;
             }
         }
