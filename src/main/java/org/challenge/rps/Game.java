@@ -46,6 +46,14 @@ public class Game {
      */
     private static final String Y_ANSWER = "y";
     /**
+     * 'n' answer message.
+     */
+    private static final String N_ANSWER = "n";
+    /**
+     * Message displayed, when neither 'y', nor 'n' is entered by a player.
+     */
+    private static final String UNKNOWN_CHOICE_MSG = "Unknown command: %s";
+    /**
      * Constant with computers start message.
      */
     private static final String COMPUTERS_ROUND_MSG
@@ -172,9 +180,13 @@ public class Game {
     private void compComp() {
         output.print(COMPUTERS_ROUND_MSG);
         String line = input.nextLine();
-        while (line.isEmpty() || line.toLowerCase().startsWith(Y_ANSWER)) {
-            makeRound(first.next(), second.next(),
-                    YOUR_COMPUTER_WIN_MSG, FOREIGN_COMPUTER_WIN_MSG);
+        while (!line.equalsIgnoreCase(N_ANSWER)) {
+            if (line.isEmpty() || line.equalsIgnoreCase(Y_ANSWER)) {
+                makeRound(first.next(), second.next(),
+                        YOUR_COMPUTER_WIN_MSG, FOREIGN_COMPUTER_WIN_MSG);
+            } else {
+                output.println(String.format(UNKNOWN_CHOICE_MSG, line));
+            }
             output.print(COMPUTERS_ROUND_MSG);
             line = input.nextLine();
         }
