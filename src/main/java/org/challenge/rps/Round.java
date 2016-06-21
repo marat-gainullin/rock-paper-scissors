@@ -56,10 +56,8 @@ public class Round {
     public final Optional<Tool> winner() {
         if (firstTool == secondTool) {
             return Optional.empty();
-        } else if (firstTool.ordinal() - secondTool.ordinal() == -1
-                || firstTool.ordinal() - secondTool.ordinal() == 2) {
+        } else if (firstTool.wins(secondTool)) {
             return Optional.of(firstTool);
-
         } else {
             return Optional.of(secondTool);
         }

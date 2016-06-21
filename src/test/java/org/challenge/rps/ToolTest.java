@@ -1,7 +1,8 @@
 package org.challenge.rps;
 
-import org.challenge.rps.exceptions.InvalidNumberException;
+import java.util.Optional;
 import org.junit.Test;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests for <code>Tool</code> enum.
@@ -10,10 +11,20 @@ import org.junit.Test;
 public class ToolTest {
 
     /**
-     * Tests for <code>Tool.as()</code> predicate. Tests wrong number outcome.
+     * Tests for <code>Tool.as()</code> predicate. Tests wrong input outcome.
      */
-    @Test(expected = InvalidNumberException.class)
-    public final void asTest() {
-        Tool.as().apply(Tool.values().length);
+    @Test
+    public final void asCrazyTest() {
+        Optional<Tool> crazy = Tool.as().apply("crazy-tool");
+        assertFalse(crazy.isPresent());
+    }
+
+    /**
+     * Tests for <code>Tool.as()</code> predicate. Tests null input outcome.
+     */
+    @Test
+    public final void asNullTest() {
+        Optional<Tool> nulled = Tool.as().apply(null);
+        assertFalse(nulled.isPresent());
     }
 }

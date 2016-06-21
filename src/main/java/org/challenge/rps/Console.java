@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
-import org.challenge.rps.exceptions.InvalidNumberException;
 
 /**
  * Utility class with useful abstractions for console from/output.
@@ -24,12 +23,7 @@ public final class Console {
     /**
      * Error message, when unknown number is entered.
      */
-    private static final String UNKNOWN_NUMBER_MSG = "Unknown number %d. "
-            + TRY_AGAIN_MSG;
-    /**
-     * Error message, when not a number is entered.
-     */
-    private static final String NOT_NUMBER_MSG = "'%s' is not a nunmber. "
+    private static final String UNKNOWN_CHOICE_MSG = "Unknown choice %s. "
             + TRY_AGAIN_MSG;
     /**
      * Textual prefix of quit level command.
@@ -76,33 +70,20 @@ public final class Console {
      */
     public static <T> Optional<T> from(final Scanner aSource,
             final PrintStream aOut, final String anAttemptMessge,
-            final Function<Integer, Optional<T>> aFactory) {
-        Runnable attempt = () -> {
-            aOut.print(anAttemptMessge);
-            aOut.print(PROMPT);
-        };
-        attempt.run();
+            final Function<String, Optional<T>> aFactory) {
         Optional<T> entity = Optional.empty();
         while (!entity.isPresent()) {
-            String line = aSource.nextLine().toLowerCase();
-            if (line.startsWith(EXIT_COMMAND)) {
-                break;
-            } else {
-                try {
-                    entity = aFactory.apply(Integer.valueOf(line));
-                } catch (NumberFormatException ex) {
-                    if (line.isEmpty()) {
-                        aOut.println(TRY_AGAIN_MSG);
-                    } else {
-                        aOut.println(String.format(
-                                NOT_NUMBER_MSG, line));
-                    }
-                    attempt.run();
-                } catch (InvalidNumberException ex) {
+            aOut.print(anAttemptMessge);
+            aOut.print(PROMPT);
+            String line = aSource.nextLine();
+            if (!EXIT_COMMAND.equalsIgnoreCase(line)) {
+                entity = aFactory.apply(line);
+                if (!entity.isPresent()) {
                     aOut.println(String.format(
-                            UNKNOWN_NUMBER_MSG, ex.getNumber()));
-                    attempt.run();
+                            UNKNOWN_CHOICE_MSG, line));
                 }
+            } else {
+                break;
             }
         }
         return entity;
@@ -158,7 +139,7 @@ public final class Console {
             message
                     .append(cmd.getName())
                     .append(" - ")
-                    .append(cmd.ordinal())
+                    .append(cmd.getValue())
                     .append(" / ");
         }
         return message.toString();
@@ -175,7 +156,7 @@ public final class Console {
             message
                     .append(tool.getName())
                     .append(" - ")
-                    .append(tool.ordinal())
+                    .append(tool.getValue())
                     .append(", ");
         }
         return message.toString();

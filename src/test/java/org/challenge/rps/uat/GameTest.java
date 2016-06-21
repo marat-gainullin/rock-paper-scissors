@@ -53,8 +53,8 @@ public class GameTest {
      */
     @Test
     public final void freshness() throws UnsupportedEncodingException {
-        String sample = "1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n"
-                + "0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\nq\nq\n";
+        String sample = "2\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n"
+                + "1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\nq\nq\n";
         int sameGames = 0;
         for (int g = 0; g < SAMPLES_COUNT; g++) {
             String gameOutput1 = makeGame(sample, Settings.defaultSettings());
@@ -75,7 +75,7 @@ public class GameTest {
      */
     @Test
     public final void compInsteadOfUser() throws UnsupportedEncodingException {
-        String gameOutput = makeGame("0\n\ny\ny\nj\nn\nq\n",
+        String gameOutput = makeGame("1\n\ny\ny\nj\nn\nq\n",
                 Settings.defaultSettings());
         assertTrue(gameOutput.contains("Let computer make your choice?"));
     }
@@ -89,7 +89,7 @@ public class GameTest {
      */
     @Test
     public final void playerHimself() throws UnsupportedEncodingException {
-        String gameOutput = makeGame("1\n0\n0\n0\n0\n0\n0\n0\n0\nq\nq\n",
+        String gameOutput = makeGame("2\n1\n1\n1\n1\n1\n1\n1\n1\nq\nq\n",
                 Settings.defaultSettings());
         assertTrue(gameOutput.contains("You win!")
                 || gameOutput.contains("Computer wins."));
@@ -105,7 +105,7 @@ public class GameTest {
      */
     @Test
     public final void timePeriod() throws UnsupportedEncodingException {
-        String gameOutput = makeGame("1\n0\n0\nq\n1\n0\nq\nq\n",
+        String gameOutput = makeGame("2\n1\n1\nq\n2\n1\nq\nq\n",
                 Settings.parse("-warn-period", "0"));
         assertTrue(gameOutput.contains("time is up"));
     }

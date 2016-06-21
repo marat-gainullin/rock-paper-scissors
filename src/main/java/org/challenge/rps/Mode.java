@@ -1,8 +1,9 @@
 package org.challenge.rps;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.challenge.rps.exceptions.InvalidNumberException;
 
 /**
  * Enum of available modes for the first player.
@@ -14,33 +15,49 @@ public enum Mode {
     /**
      * Mode to start a game in computer vs. computer mode.
      */
-    COMP("Computer instead of me"),
+    COMP("Computer instead of me", "1"),
     /**
      * Mode to start a game in player vs. computer mode.
      */
-    PLAYER("Will play by myself");
+    PLAYER("Will play by myself", "2");
 
     /**
      * Name of the mode element.
      */
-    private final String name;
+    private final String description;
+
+    /**
+     * Nnumber used for input.
+     */
+    private final String value;
 
     /**
      * Mode enumeration element constructor.
      *
      * @param aName Name of the mode.
+     * @param aValue Value of the mode.
      */
-    Mode(final String aName) {
-        name = aName;
+    Mode(final String aName, final String aValue) {
+        description = aName;
+        value = aValue;
     }
 
     /**
-     * Enumeration element's name property getter.
+     * Element's name property getter.
      *
      * @return Enumeration element's name.
      */
     public String getName() {
-        return name;
+        return description;
+    }
+
+    /**
+     * Element's name property getter.
+     *
+     * @return Enumeration element's value.
+     */
+    public String getValue() {
+        return value;
     }
 
     /**
@@ -49,7 +66,13 @@ public enum Mode {
      *
      * @see #as()
      */
-    private static final Mode[] MODES = Mode.values();
+    private static final Map<String, Mode> MODES = new HashMap<String, Mode>() {
+        {
+            for (Mode mode : Mode.values()) {
+                put(mode.getValue().toLowerCase(), mode);
+            }
+        }
+    };
 
     /**
      * Predicate for <code>ConsoleUtils.nextId()</code>.
@@ -57,12 +80,17 @@ public enum Mode {
      * @return Predicate for <code>ConsoleUtils.nextId()</code>.
      * @see ConsoleUtils#nextId(java.util.Scanner, java.util.function.Function)
      */
-    public static Function<Integer, Optional<Mode>> as() {
-        return (Integer aOrdinal) -> {
-            try {
-                return Optional.of(MODES[aOrdinal]);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                throw new InvalidNumberException(aOrdinal);
+    public static Function<String, Optional<Mode>> as() {
+        return (String aValue) -> {
+            if (aValue == null) {
+                return Optional.empty();
+            } else {
+                String lowerValue = aValue.toLowerCase();
+                if (MODES.containsKey(lowerValue)) {
+                    return Optional.of(MODES.get(lowerValue));
+                } else {
+                    return Optional.empty();
+                }
             }
         };
     }

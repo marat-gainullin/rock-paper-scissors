@@ -16,7 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class ConsoleTest {
 
     /**
-     * Tests wether correctg and known from leads to exepected command creation.
+     * Tests weither correctg and known from leads to exepected command
+     * creation.
      *
      * @throws UnsupportedEncodingException From <code>Console.from()</code>
      * @see Console#from(java.util.Scanner, java.io.PrintStream,
@@ -24,7 +25,7 @@ public class ConsoleTest {
      */
     @Test
     public final void correctKnownInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner("0\n")) {
+        try (Scanner in = new Scanner("1\n")) {
             assertSame(Mode.COMP, Console.from(
                     in, System.out,
                     "", Mode.as()).get());
@@ -40,7 +41,7 @@ public class ConsoleTest {
      */
     @Test
     public final void incorrectInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner("blah blah blah\n0\n")) {
+        try (Scanner in = new Scanner("blah blah blah\n1\n")) {
             assertSame(Mode.COMP, Console.from(
                     in, System.out, "",
                     Mode.as()).get());
@@ -57,7 +58,7 @@ public class ConsoleTest {
      */
     @Test
     public final void unknownInput() throws UnsupportedEncodingException {
-        try (Scanner in = new Scanner("10\n0\n")) {
+        try (Scanner in = new Scanner("10\n1\n")) {
             assertSame(Mode.COMP, Console.from(in, System.out,
                     "", Mode.as()).get());
         }
@@ -73,10 +74,10 @@ public class ConsoleTest {
      */
     @Test(expected = IllegalStateException.class)
     public final void interruptedInput() throws UnsupportedEncodingException {
-        Integer expectedInput = 2;
-        try (Scanner in = new Scanner(expectedInput.toString())) {
-            assertNull(Console.from(in, System.out, "", (Integer aOrdinal) -> {
-                assertEquals(expectedInput, aOrdinal);
+        String expectedInput = "2";
+        try (Scanner in = new Scanner(expectedInput)) {
+            assertNull(Console.from(in, System.out, "", (String aText) -> {
+                assertEquals(expectedInput, aText);
                 throw new IllegalStateException("Test input is interrupted.");
             }).get());
         }
@@ -106,7 +107,7 @@ public class ConsoleTest {
     @Test(expected = NoSuchElementException.class)
     public final void emptyInputWithLf() throws UnsupportedEncodingException {
         try (Scanner in = new Scanner("\n")) {
-            Console.from(in, System.out, "", null);
+            Console.from(in, System.out, "", Mode.as());
         }
     }
 
