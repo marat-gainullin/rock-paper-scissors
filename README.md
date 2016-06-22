@@ -1,5 +1,8 @@
 # Rock paper scissors game
-Thihs is rock paper scissors game console application.
+This is rock paper scissors game console application.
+
+The game is a coding training project. Once a new knowledge or quality improvement technique is added to my skillset
+this project is also improved as a traning code base.
 
 ## Design
 The game is designed as a console application and executes player's commands.
@@ -7,7 +10,7 @@ First, the game invites a player to choose game mode (player himself vs. compute
 Then the game allows to select one of available tools or quit the game and return to mode selection.
 In the computer vs. computer mode, game waits for player's confirmation of a new round or a quit command.
 
-The game has a lighwieght console processor isolated from game's logic.
+The game has a lightwieght console processor isolated from game's logic.
 
 The game has a strategy, that is followed by computers while making moves.
 Since a player wants to play a new game each time, computers' moves are based on randomness,
