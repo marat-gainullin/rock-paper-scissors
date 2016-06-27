@@ -35,10 +35,8 @@ There is two `Strategy` interface implementations, - `ExponentialStrategy` and `
 Exponential strategy has a disadvantage while selecting among uniformly succeesive tools. So, non uniform range strategy is used as for now.
 
 ### Extension
-If you want to add tools (weapons) and transform the game into another game, you should add new tools to the `Tool` enumeration and re-implement `Round.winner()` method.
+If you want to add tools (weapons) and transform the game into another game, you should add new tools to the `Tool` enumeration and `Tool.BEATED` map.
 Also, you should refactor `Round` tests.
-
-The example of what you have to do to extend the game is on the "extension" branch.
 
 ## Install
 The game requires Java 8 to run.
