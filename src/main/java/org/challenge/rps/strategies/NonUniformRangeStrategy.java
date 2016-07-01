@@ -5,7 +5,7 @@ import java.util.Random;
 import org.challenge.rps.Tool;
 
 /**
- * Strategy for selecting of tools with thiers success in mind. Uses non uniform
+ * Strategy for selecting of tools with theirs success in mind. Uses non uniform
  * mapping of [0; 1) interval to [0; <code>Tool.values().length - 1</code>]
  * interval. Every tool is mapped to subintervals of different wideness.
  *
@@ -90,7 +90,7 @@ public class NonUniformRangeStrategy implements Strategy {
         for (int i = 0; i < success.length; i++) {
             float range = success[i] / (float) sum;
             float right = left + range;
-            if (u >= left && u < right) {
+            if (left <= u && u < right) {
                 selected = tools[i];
             }
             left = right;
