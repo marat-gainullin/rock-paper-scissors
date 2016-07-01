@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Enum of available tools for player to select from. Each tool has assoiated
- * tools wich beta it.
+ * Enum of available tools for player to select from. Each tool has associated
+ * tools wich it beats.
  *
  * @author mg
  */
@@ -92,7 +92,7 @@ public enum Tool {
     };
 
     /**
-     * Array of enumeration element by ordinal position. It is used in as()
+     * Map of enumeration elements by value. It is used in as()
      * predicate.
      *
      * @see #as()
