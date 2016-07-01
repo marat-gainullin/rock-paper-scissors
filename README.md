@@ -31,7 +31,7 @@ This will care of proper random seed.
 Computers' moves are made based on strategy of successful tools selection.
 Past rounds serve as a gain/penalty source. Every round adds to its tools a penalty or a gain weight.
 Before the selection of a tool for the next round, random number is generated and projected on a tools range with non-uniform segmentation based on tools' weight.
-There is two `Strategy` interface implementations, - `ExponentialStrategy` and `NonUniformRangeStrategy`.
+There are two `Strategy` interface implementations, - `ExponentialStrategy` and `NonUniformRangeStrategy`.
 Exponential strategy has a disadvantage while selecting among uniformly succeesive tools. So, non uniform range strategy is used as for now.
 
 ### Extension
